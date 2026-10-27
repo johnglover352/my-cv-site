@@ -130,4 +130,156 @@
             font-weight: 600;
             font-size: 0.95rem;
             transition: all 0.2s ease;
-            box-shadow: 0 4
+            box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3);
+        }
+
+        .btn:hover {
+            background-color: #2ea043;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(46, 160, 67, 0.4);
+        }
+
+        .socials {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+
+        .socials a {
+            color: #58a6ff;
+            text-decoration: none;
+            margin: 0 8px;
+            transition: color 0.2s ease;
+        }
+
+        .socials a:hover {
+            color: #79c0ff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animation Canvas -->
+    <canvas id="math-canvas"></canvas>
+
+    <div class="container">
+        <h1>John Glover, Ph.D.</h1>
+        <p class="subtitle">Director, Algo eRisk Quant Trader | European Rates & SSA Specialist</p>
+        
+        <p class="bio">
+            Specializing in relative value, automated flow-hedging, and electronic risk management across European government bonds (EGB) and SSA spread markets.
+        </p>
+
+        <div>
+            <a href="johnGlover_ratesQuant_CV.pdf" target="_blank" rel="noopener noreferrer" class="btn">
+                📄 View CV (PDF)
+            </a>
+        </div>
+
+        <div class="socials">
+            <a href="mailto:j_glover1@sky.com">Email</a>
+            <span>•</span>
+            <a href="https://twitter.com/johnTheGlove" target="_blank" rel="noopener noreferrer">X (@johnTheGlove)</a>
+            <span>•</span>
+            <a href="https://instagram.com/johnTheGlove" target="_blank" rel="noopener noreferrer">Instagram (@johnTheGlove)</a>
+        </div>
+    </div>
+
+    <!-- Canvas Animation Script -->
+    <script>
+        const canvas = document.getElementById('math-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Math, Rocketry, Quant Distributions, & Bond Tickers
+        const textSymbols = [
+            '∑', '∫', '∂', 'σ', '∞', 'Δ', 'd/dt', 'λ', 'μ', 'θ', '∇', 
+            'N(d1)', 'Δv', 'Isp', 'v_esc', 'F=ma', 'μ/r²', 'h_LEO',
+            'BUND 10Y', 'OAT 10Y', 'BTP 10Y', 'BONOS 10Y', 'GILTS 10Y', 
+            '€STR', 'EURIBOR', 'ASW', 'EGB/SSA', 'N(0,1)', 'χ²'
+        ];
+        
+        const particles = [];
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 50;
+                this.isGraph = Math.random() < 0.22; 
+                this.text = textSymbols[Math.floor(Math.random() * textSymbols.length)];
+                this.size = Math.random() * 12 + 11;
+                this.speed = Math.random() * 0.55 + 0.2;
+                this.opacity = Math.random() * 0.35 + 0.12;
+                this.graphWidth = Math.random() * 30 + 40;
+                this.graphHeight = this.graphWidth * 0.5;
+            }
+
+            update() {
+                this.y -= this.speed;
+                if (this.y < -50) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.strokeStyle = `rgba(88, 166, 255, ${this.opacity})`;
+                ctx.fillStyle = `rgba(88, 166, 255, ${this.opacity})`;
+
+                if (this.isGraph) {
+                    ctx.beginPath();
+                    const w = this.graphWidth;
+                    const h = this.graphHeight;
+                    const startX = this.x;
+                    const startY = this.y;
+
+                    ctx.moveTo(startX, startY);
+                    for (let px = 0; px <= w; px++) {
+                        const normX = (px / w - 0.5) * 6;
+                        const normY = Math.exp(-0.5 * normX * normX);
+                        ctx.lineTo(startX + px, startY - normY * h);
+                    }
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(startX + w, startY);
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                } else {
+                    ctx.font = `${this.size}px monospace`;
+                    ctx.fillText(this.text, this.x, this.y);
+                }
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 52; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
