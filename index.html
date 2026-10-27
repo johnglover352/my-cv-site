@@ -129,14 +129,10 @@
             border-radius: 6px;
             font-weight: 600;
             font-size: 0.95rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3);
-        }
-
-        .btn:hover {
-            background-color: #2ea043;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(46, 160, 67, 0.4);
+            /* Disabled interaction styles */
+            pointer-events: none;
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .socials {
@@ -172,7 +168,8 @@
         </p>
 
         <div>
-            <a href="johnGlover_ratesQuant_CV.pdf" target="_blank" rel="noopener noreferrer" class="btn">
+            <!-- Button is visible but non-clickable -->
+            <a href="johnGlover_ratesQuant_CV.pdf" target="_blank" rel="noopener noreferrer" class="btn" tabindex="-1" aria-disabled="true">
                 📄 View CV (PDF)
             </a>
         </div>
@@ -186,7 +183,7 @@
         </div>
     </div>
 
-    <!-- Canvas Animation Script (Random Floating Physics) -->
+    <!-- Canvas Animation Script -->
     <script>
         const canvas = document.getElementById('math-canvas');
         const ctx = canvas.getContext('2d');
@@ -215,7 +212,6 @@
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                // Random drift velocities in X and Y directions
                 this.vx = (Math.random() - 0.5) * 0.4;
                 this.vy = (Math.random() - 0.5) * 0.4;
                 
@@ -231,7 +227,6 @@
                 this.x += this.vx;
                 this.y += this.vy;
 
-                // Wrap around screen boundaries smoothly
                 if (this.x < -60) this.x = canvas.width + 50;
                 if (this.x > canvas.width + 60) this.x = -50;
                 if (this.y < -60) this.y = canvas.height + 50;
