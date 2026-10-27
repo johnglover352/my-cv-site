@@ -123,15 +123,16 @@
         .btn {
             display: inline-block;
             padding: 12px 26px;
-            background-color: #238636;
-            color: #ffffff;
+            background-color: #21262d;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #c9d1d9;
             text-decoration: none;
             border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.95rem;
+            font-weight: 500;
+            font-size: 0.9rem;
             /* Disabled interaction styles */
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.7;
             cursor: not-allowed;
         }
 
@@ -168,9 +169,9 @@
         </p>
 
         <div>
-            <!-- Button is visible but non-clickable -->
-            <a href="johnGlover_ratesQuant_CV.pdf" target="_blank" rel="noopener noreferrer" class="btn" tabindex="-1" aria-disabled="true">
-                📄 View CV (PDF)
+            <!-- Non-clickable status badge -->
+            <a href="#" class="btn" tabindex="-1" aria-disabled="true">
+                ⚙️ Expanded profile in development
             </a>
         </div>
 
@@ -189,98 +190,3 @@
         const ctx = canvas.getContext('2d');
 
         function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        const textSymbols = [
-            '∑', '∫', '∂', 'σ', '∞', 'Δ', 'd/dt', 'λ', 'μ', 'θ', '∇', 
-            'N(d1)', 'Δv', 'Isp', 'v_esc', 'F=ma', 'μ/r²', 'h_LEO',
-            'BUND 10Y', 'OAT 10Y', 'BTP 10Y', 'BONOS 10Y', 'GILTS 10Y', 
-            '€STR', 'EURIBOR', 'ASW', 'EGB/SSA', 'N(0,1)', 'χ²'
-        ];
-        
-        const particles = [];
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                
-                this.isGraph = Math.random() < 0.22; 
-                this.text = textSymbols[Math.floor(Math.random() * textSymbols.length)];
-                this.size = Math.random() * 12 + 11;
-                this.opacity = Math.random() * 0.35 + 0.12;
-                this.graphWidth = Math.random() * 30 + 40;
-                this.graphHeight = this.graphWidth * 0.5;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < -60) this.x = canvas.width + 50;
-                if (this.x > canvas.width + 60) this.x = -50;
-                if (this.y < -60) this.y = canvas.height + 50;
-                if (this.y > canvas.height + 60) this.y = -50;
-            }
-
-            draw() {
-                ctx.save();
-                ctx.strokeStyle = `rgba(88, 166, 255, ${this.opacity})`;
-                ctx.fillStyle = `rgba(88, 166, 255, ${this.opacity})`;
-
-                if (this.isGraph) {
-                    ctx.beginPath();
-                    const w = this.graphWidth;
-                    const h = this.graphHeight;
-                    const startX = this.x;
-                    const startY = this.y;
-
-                    ctx.moveTo(startX, startY);
-                    for (let px = 0; px <= w; px++) {
-                        const normX = (px / w - 0.5) * 6;
-                        const normY = Math.exp(-0.5 * normX * normX);
-                        ctx.lineTo(startX + px, startY - normY * h);
-                    }
-                    ctx.lineWidth = 1.5;
-                    ctx.stroke();
-
-                    ctx.beginPath();
-                    ctx.moveTo(startX, startY);
-                    ctx.lineTo(startX + w, startY);
-                    ctx.lineWidth = 0.5;
-                    ctx.stroke();
-                } else {
-                    ctx.font = `${this.size}px monospace`;
-                    ctx.fillText(this.text, this.x, this.y);
-                }
-                ctx.restore();
-            }
-        }
-
-        for (let i = 0; i < 52; i++) {
-            particles.push(new Particle());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-    </script>
-</body>
-</html>
