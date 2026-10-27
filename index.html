@@ -74,7 +74,7 @@
             position: relative;
         }
 
-        /* Math Animation Canvas Background */
+        /* Math & Rocketry Animation Canvas Background */
         #math-canvas {
             position: absolute;
             top: 0;
@@ -147,7 +147,7 @@
         .socials a {
             color: #58a6ff;
             text-decoration: none;
-            margin: 0 10px;
+            margin: 0 8px;
             transition: color 0.2s ease;
         }
 
@@ -159,7 +159,7 @@
 </head>
 <body>
 
-    <!-- Background Math Animation Canvas -->
+    <!-- Background Animation Canvas -->
     <canvas id="math-canvas"></canvas>
 
     <div class="container">
@@ -177,6 +177,8 @@
         </div>
 
         <div class="socials">
+            <a href="mailto:j_glover1@sky.com">Email</a>
+            <span>•</span>
             <a href="https://twitter.com/johnTheGlove" target="_blank" rel="noopener noreferrer">X (@johnTheGlove)</a>
             <span>•</span>
             <a href="https://instagram.com/johnTheGlove" target="_blank" rel="noopener noreferrer">Instagram (@johnTheGlove)</a>
@@ -195,7 +197,11 @@
         window.addEventListener('resize', resize);
         resize();
 
-        const symbols = ['∑', '∫', '∂', 'σ', '∞', 'Δ', 'd/dt', 'λ', 'μ', 'θ', '∇', 'α', 'β', 'γ', 'E[X]', 'P&L', 'N(d1)'];
+        // Combined Math, Quant, and Space Physics / Rocketry symbols
+        const symbols = [
+            '∑', '∫', '∂', 'σ', '∞', 'Δ', 'd/dt', 'λ', 'μ', 'θ', '∇', 
+            'E[X]', 'P&L', 'N(d1)', 'Δv', 'Isp', 'v_esc', 'F=ma', 'μ/r²', 'h_LEO'
+        ];
         const particles = [];
 
         class Particle {
@@ -226,7 +232,7 @@
             }
         }
 
-        for (let i = 0; i < 45; i++) {
+        for (let i = 0; i < 48; i++) {
             particles.push(new Particle());
         }
 
