@@ -14,7 +14,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>John Glover, Ph.D. | Director, Algo eRisk Quant Trader</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="John Glover, Ph.D. — Director, Algo eRisk Quant Trader at HSBC, formerly Morgan Stanley. Specialist in European Rates, SSA, EGB relative value, and electronic risk.">
+    <meta name="keywords" content="John Glover, HSBC, Morgan Stanley, Quant Trader, Algo eRisk, SSA, EGB, European Rates, Relative Value, Quantitative Finance, Imperial College London">
+    <meta name="author" content="John Glover">
+
+    <!-- JSON-LD Structured Data Schema for Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "John Glover",
+      "jobTitle": "Director, Algo eRisk Quant Trader",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "HSBC"
+      },
+      "alumniOf": [
+        {
+          "@type": "EducationalOrganization",
+          "name": "Imperial College London"
+        },
+        {
+          "@type": "Organization",
+          "name": "Morgan Stanley"
+        }
+      ],
+      "url": "https://johnTheGlove.com",
+      "sameAs": [
+        "https://twitter.com/johnTheGlove",
+        "https://instagram.com/johnTheGlove"
+      ],
+      "knowsAbout": [
+        "Algorithmic Trading",
+        "eRisk",
+        "European Government Bonds (EGB)",
+        "Supranational, Agency and Covered Bonds (SSA)",
+        "Relative Value Trading",
+        "Quantitative Finance"
+      ]
+    }
+    </script>
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
@@ -22,58 +68,107 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #f9f9f9;
-            color: #333;
+            background-color: #0d1117;
+            color: #e6edf3;
+            overflow: hidden;
+            position: relative;
         }
+
+        /* Math Animation Canvas Background */
+        #math-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
         .container {
             text-align: center;
-            padding: 2rem;
-            max-width: 600px;
+            padding: 2.5rem;
+            max-width: 650px;
+            z-index: 2;
+            background: rgba(13, 17, 23, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
+
         h1 {
             margin-bottom: 0.25rem;
-            font-size: 2.2rem;
+            font-size: 2.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
+
         .subtitle {
-            font-size: 1.1rem;
-            color: #555;
+            font-size: 1.05rem;
+            color: #58a6ff;
             margin-top: 0;
+            margin-bottom: 1.25rem;
+            font-weight: 500;
+        }
+
+        .bio {
+            color: #8b949e;
+            font-size: 0.95rem;
+            line-height: 1.6;
             margin-bottom: 1.5rem;
         }
+
         .btn {
             display: inline-block;
-            padding: 12px 24px;
-            background-color: #111;
-            color: #fff;
+            padding: 12px 26px;
+            background-color: #238636;
+            color: #ffffff;
             text-decoration: none;
             border-radius: 6px;
             font-weight: 600;
-            margin: 1rem 0;
-            transition: background-color 0.2s ease;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3);
         }
+
         .btn:hover {
-            background-color: #333;
+            background-color: #2ea043;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(46, 160, 67, 0.4);
         }
+
         .socials {
             margin-top: 2rem;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            color: #8b949e;
         }
+
         .socials a {
-            color: #0066cc;
+            color: #58a6ff;
             text-decoration: none;
             margin: 0 10px;
+            transition: color 0.2s ease;
         }
+
         .socials a:hover {
+            color: #79c0ff;
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
+
+    <!-- Background Math Animation Canvas -->
+    <canvas id="math-canvas"></canvas>
+
     <div class="container">
         <h1>John Glover, Ph.D.</h1>
         <p class="subtitle">Director, Algo eRisk Quant Trader | European Rates & SSA Specialist</p>
         
-        <p>Welcome to my site. Project updates and research coming soon.</p>
+        <p class="bio">
+            Specializing in relative value, automated flow-hedging, and electronic risk management across European government bonds (EGB) and SSA spread markets.
+        </p>
 
         <div>
             <a href="johnGlover_ratesQuant_CV.pdf" target="_blank" rel="noopener noreferrer" class="btn">
@@ -87,5 +182,64 @@
             <a href="https://instagram.com/johnTheGlove" target="_blank" rel="noopener noreferrer">Instagram (@johnTheGlove)</a>
         </div>
     </div>
+
+    <!-- Canvas Animation Script -->
+    <script>
+        const canvas = document.getElementById('math-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const symbols = ['∑', '∫', '∂', 'σ', '∞', 'Δ', 'd/dt', 'λ', 'μ', 'θ', '∇', 'α', 'β', 'γ', 'E[X]', 'P&L', 'N(d1)'];
+        const particles = [];
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 50;
+                this.text = symbols[Math.floor(Math.random() * symbols.length)];
+                this.size = Math.random() * 14 + 12;
+                this.speed = Math.random() * 0.6 + 0.2;
+                this.opacity = Math.random() * 0.4 + 0.1;
+            }
+
+            update() {
+                this.y -= this.speed;
+                if (this.y < -30) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(88, 166, 255, ${this.opacity})`;
+                ctx.font = `${this.size}px monospace`;
+                ctx.fillText(this.text, this.x, this.y);
+            }
+        }
+
+        for (let i = 0; i < 45; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
 </body>
 </html>
