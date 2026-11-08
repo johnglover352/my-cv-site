@@ -9,7 +9,6 @@
       gtag('js', new Date());
       gtag('config', 'G-2TTW4ZZGMK');
     </script>
-
     <!-- Vercel Web Analytics -->
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
     <meta charset="UTF-8">
@@ -18,7 +17,6 @@
     <meta name="description" content="John Glover, Ph.D. — Director, Algo eRisk Quant Trader at HSBC, formerly Morgan Stanley. Specialist in European Rates, SSA, EGB relative value, and electronic risk management.">
     <meta name="keywords" content="John Glover, HSBC, Morgan Stanley, Quant Trader, Algo eRisk, SSA, EGB, European Rates, Relative Value, Quantitative Finance, Imperial College London">
     <meta name="author" content="John Glover">
-
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -31,232 +29,63 @@
         { "@type": "Organization", "name": "Morgan Stanley" }
       ],
       "url": "https://johnTheGlove.com",
-      "sameAs": [
-        "https://twitter.com/johnTheGlove",
-        "https://instagram.com/johnTheGlove"
-      ],
-      "knowsAbout": [
-        "Algorithmic Trading", "eRisk", "European Government Bonds (EGB)",
-        "Supranational, Agency and Covered Bonds (SSA)",
-        "Relative Value Trading", "Quantitative Finance"
-      ]
+      "sameAs": ["https://twitter.com/johnTheGlove", "https://instagram.com/johnTheGlove"],
+      "knowsAbout": ["Algorithmic Trading", "eRisk", "European Government Bonds (EGB)", "Supranational, Agency and Covered Bonds (SSA)", "Relative Value Trading", "Quantitative Finance"]
     }
     </script>
-
     <style>
         * { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 32px;
-            background-color: #0d1117;
-            color: #e6edf3;
-            position: relative;
-            overflow-x: hidden;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; padding: 32px;
+            background-color: #0d1117; color: #e6edf3;
+            position: relative; overflow-x: hidden;
         }
-
-        #math-canvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .page-content {
-            width: min(1120px, 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 28px;
-            z-index: 1;
-        }
-
+        #math-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .page-content { width: min(1120px, 100%); display: flex; flex-direction: column; align-items: center; gap: 28px; z-index: 1; }
         .yield-chart {
-            width: 100%;
-            padding: 22px 26px 18px;
+            width: 100%; padding: 22px 26px 18px;
             background: linear-gradient(145deg, rgba(20, 27, 38, 0.96), rgba(13, 17, 23, 0.92));
-            border: 1px solid rgba(139, 148, 158, 0.22);
-            border-radius: 12px;
+            border: 1px solid rgba(139, 148, 158, 0.22); border-radius: 12px;
             box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28), inset 0 1px rgba(255,255,255,0.035);
         }
-
-        .chart-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 20px;
-        }
-
-        .chart-title {
-            margin: 0;
-            color: #e6edf3;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-        }
-
-        .chart-subtitle {
-            margin: 5px 0 0;
-            color: #8b949e;
-            font-size: 0.76rem;
-        }
-
-        .chart-badge {
-            flex: 0 0 auto;
-            color: #8b949e;
-            font-size: 0.68rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .chart-controls {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 18px;
-        }
-
-        .control-label {
-            margin-right: 4px;
-            color: #8b949e;
-            font-size: 0.72rem;
-        }
-
-        .metric-button {
-            padding: 7px 12px;
-            border: 1px solid rgba(139, 148, 158, 0.26);
-            border-radius: 6px;
-            background: rgba(22, 27, 34, 0.8);
-            color: #c9d1d9;
-            font: inherit;
-            font-size: 0.72rem;
-            cursor: pointer;
-            transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-        }
-
+        .chart-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+        .chart-title { margin: 0; color: #e6edf3; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.04em; }
+        .chart-subtitle { margin: 5px 0 0; color: #8b949e; font-size: 0.76rem; }
+        .chart-badge { flex: 0 0 auto; color: #8b949e; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; }
+        .chart-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+        .control-label { margin-right: 4px; color: #8b949e; font-size: 0.72rem; }
+        .metric-button { padding: 7px 12px; border: 1px solid rgba(139,148,158,0.26); border-radius: 6px; background: rgba(22,27,34,0.8); color: #c9d1d9; font: inherit; font-size: 0.72rem; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
         .metric-button:hover { border-color: #58a6ff; color: #e6edf3; }
-        .metric-button[aria-pressed="true"] {
-            background: rgba(56, 139, 253, 0.16);
-            border-color: #388bfd;
-            color: #79c0ff;
-        }
+        .metric-button[aria-pressed="true"] { background: rgba(56,139,253,0.16); border-color: #388bfd; color: #79c0ff; }
         .metric-button:focus-visible { outline: 2px solid #58a6ff; outline-offset: 2px; }
-
-        #yield-canvas {
-            display: block;
-            width: 100%;
-            height: 300px;
-            margin-top: 8px;
-        }
-
-        .chart-legend {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 22px;
-            padding-top: 4px;
-            color: #8b949e;
-            font-size: 0.72rem;
-        }
-
+        #yield-canvas { display: block; width: 100%; height: 300px; margin-top: 8px; }
+        .chart-legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 22px; padding-top: 4px; color: #8b949e; font-size: 0.72rem; }
         .legend-item { display: inline-flex; align-items: center; gap: 7px; }
         .legend-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-        .legend-curve { background: #58a6ff; }
-        .legend-buy { background: #3fb950; }
-        .legend-sell { background: #f85149; }
-
-        .container {
-            width: min(650px, 100%);
-            text-align: center;
-            padding: 2.5rem;
-            background: rgba(13, 17, 23, 0.86);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        h1 {
-            margin: 0 0 0.25rem;
-            font-size: 2.3rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            font-size: 1.05rem;
-            color: #58a6ff;
-            margin: 0 0 1.25rem;
-            font-weight: 500;
-        }
-
-        .bio {
-            color: #8b949e;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin: 0 0 1.5rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 26px;
-            background-color: #21262d;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #c9d1d9;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
-
-        .btn:hover, .btn:focus-visible {
-            background-color: #30363d;
-            border-color: #58a6ff;
-        }
-
-        .socials {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #8b949e;
-        }
-
-        .socials a {
-            color: #58a6ff;
-            text-decoration: none;
-            margin: 0 8px;
-            transition: color 0.2s ease;
-        }
-
+        .legend-curve { background: #58a6ff; } .legend-buy { background: #3fb950; } .legend-sell { background: #f85149; }
+        .container { width: min(650px, 100%); text-align: center; padding: 2.5rem; background: rgba(13,17,23,0.86); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { margin: 0 0 0.25rem; font-size: 2.3rem; font-weight: 700; letter-spacing: -0.5px; }
+        .subtitle { font-size: 1.05rem; color: #58a6ff; margin: 0 0 1.25rem; font-weight: 500; }
+        .bio { color: #8b949e; font-size: 0.95rem; line-height: 1.6; margin: 0 0 1.5rem; }
+        .btn { display: inline-block; padding: 12px 26px; background-color: #21262d; border: 1px solid rgba(255,255,255,0.15); color: #c9d1d9; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 0.9rem; transition: background-color 0.2s ease, border-color 0.2s ease; }
+        .btn:hover, .btn:focus-visible { background-color: #30363d; border-color: #58a6ff; }
+        .socials { margin-top: 2rem; font-size: 0.9rem; color: #8b949e; }
+        .socials a { color: #58a6ff; text-decoration: none; margin: 0 8px; transition: color 0.2s ease; }
         .socials a:hover { color: #79c0ff; text-decoration: underline; }
-
         @media (max-width: 700px) {
-            body { padding: 18px 14px; }
-            .page-content { gap: 18px; }
-            .yield-chart { padding: 17px 14px 14px; }
-            #yield-canvas { height: 240px; }
-            .chart-badge { display: none; }
-            .chart-heading { gap: 8px; }
-            .container { padding: 2rem 1.25rem; }
-            h1 { font-size: 1.9rem; }
+            body { padding: 18px 14px; } .page-content { gap: 18px; }
+            .yield-chart { padding: 17px 14px 14px; } #yield-canvas { height: 240px; }
+            .chart-badge { display: none; } .chart-heading { gap: 8px; }
+            .container { padding: 2rem 1.25rem; } h1 { font-size: 1.9rem; }
             .chart-legend { gap: 12px; font-size: 0.67rem; }
         }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { scroll-behavior: auto !important; }
-        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }
     </style>
 </head>
 <body>
     <canvas id="math-canvas" aria-hidden="true"></canvas>
-
     <main class="page-content">
         <section class="yield-chart" aria-labelledby="yield-title">
             <div class="chart-heading">
@@ -279,35 +108,24 @@
                 <span class="legend-item"><span class="legend-dot legend-sell"></span>Sell · rich versus curve</span>
             </div>
         </section>
-
         <section class="container" aria-label="Profile">
             <h1>John Glover, Ph.D.</h1>
             <p class="subtitle">Director, Algo eRisk Quant Trader | European Rates &amp; SSA Specialist</p>
-            <p class="bio">
-                Specializing in relative value, automated flow-hedging, and electronic risk management across European government bonds (EGB) and SSA spread markets.
-            </p>
-            <div>
-                <a href="johnGlover_ratesQuant_CV.pdf" class="btn" target="_blank" rel="noopener noreferrer" aria-label="Explore John Glover's professional experience (PDF)">
-                    Explore my experience
-                </a>
-            </div>
+            <p class="bio">Specializing in relative value, automated flow-hedging, and electronic risk management across European government bonds (EGB) and SSA spread markets.</p>
+            <div><a href="johnGlover_ratesQuant_CV.pdf" class="btn" target="_blank" rel="noopener noreferrer" aria-label="Explore John Glover's professional experience (PDF)">Explore my experience</a></div>
             <div class="socials">
-                <a href="mailto:j_glover1@sky.com">Email</a>
-                <span>•</span>
-                <a href="https://twitter.com/johnTheGlove" target="_blank" rel="noopener noreferrer">X (@johnTheGlove)</a>
-                <span>•</span>
+                <a href="mailto:j_glover1@sky.com">Email</a><span>•</span>
+                <a href="https://twitter.com/johnTheGlove" target="_blank" rel="noopener noreferrer">X (@johnTheGlove)</a><span>•</span>
                 <a href="https://instagram.com/johnTheGlove" target="_blank" rel="noopener noreferrer">Instagram (@johnTheGlove)</a>
             </div>
         </section>
     </main>
-
     <script>
         // Ambient mathematical notation in the background.
         const bgCanvas = document.getElementById('math-canvas');
         const bgCtx = bgCanvas.getContext('2d');
         const textSymbols = ['∑', '∫', '∂', 'σ', '∞', 'Δ', 'd/dt', 'λ', 'μ', 'θ', '∇', 'N(d1)', 'ASW', 'EGB/SSA', '€STR', 'χ²'];
         const particles = [];
-
         function resizeBackground() {
             const dpr = window.devicePixelRatio || 1;
             bgCanvas.width = Math.round(window.innerWidth * dpr);
@@ -316,21 +134,16 @@
         }
         window.addEventListener('resize', resizeBackground);
         resizeBackground();
-
         class Particle {
             constructor() { this.reset(); }
             reset() {
-                this.x = Math.random() * window.innerWidth;
-                this.y = Math.random() * window.innerHeight;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
+                this.x = Math.random() * window.innerWidth; this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 0.4; this.vy = (Math.random() - 0.5) * 0.4;
                 this.text = textSymbols[Math.floor(Math.random() * textSymbols.length)];
-                this.size = Math.random() * 12 + 11;
-                this.opacity = Math.random() * 0.22 + 0.07;
+                this.size = Math.random() * 12 + 11; this.opacity = Math.random() * 0.22 + 0.07;
             }
             update() {
-                this.x += this.vx;
-                this.y += this.vy;
+                this.x += this.vx; this.y += this.vy;
                 if (this.x < -60) this.x = window.innerWidth + 50;
                 if (this.x > window.innerWidth + 60) this.x = -50;
                 if (this.y < -60) this.y = window.innerHeight + 50;
@@ -338,13 +151,10 @@
             }
             draw() {
                 bgCtx.fillStyle = `rgba(88, 166, 255, ${this.opacity})`;
-                bgCtx.font = `${this.size}px monospace`;
-                bgCtx.fillText(this.text, this.x, this.y);
+                bgCtx.font = `${this.size}px monospace`; bgCtx.fillText(this.text, this.x, this.y);
             }
         }
-
         for (let i = 0; i < 42; i++) particles.push(new Particle());
-
         function animateBackground() {
             bgCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
             particles.forEach(particle => { particle.update(); particle.draw(); });
@@ -352,49 +162,36 @@
         }
         animateBackground();
 
-        // Synthetic illustrative curves; values are invented, not live market data.
+        // Each selector uses a distinct illustrative curve and its own residual observations.
         const yieldCanvas = document.getElementById('yield-canvas');
         const yieldCtx = yieldCanvas.getContext('2d');
         const subtitle = document.getElementById('chart-subtitle');
-        const observations = [
-            { tenor: 2, residual: 0.055 },
-            { tenor: 5, residual: -0.035 },
-            { tenor: 7, residual: 0.028 },
-            { tenor: 10, residual: -0.052 },
-            { tenor: 15, residual: 0.043 },
-            { tenor: 20, residual: -0.026 },
-            { tenor: 30, residual: 0.038 }
-        ];
         const curveConfigs = {
             yield: {
-                label: 'Yield', unit: '%', min: 2.0, max: 4.5, step: 0.5,
+                label: 'Yield', unit: '%', min: 2.0, max: 4.5, step: 0.5, decimals: 1,
                 subtitle: 'Government bond yield curve and residuals to fitted curve',
-                base: tenor => 2.35 + 1.55 * (1 - Math.exp(-tenor / 8.5)) - 0.22 * tenor / 30,
-                residualScale: 1,
-                levelMove: 0.075,
-                slopeMove: 0.10,
-                curvatureMove: 0.08,
-                decimals: 2
+                base: tenor => 2.30 + 1.72 * (1 - Math.exp(-tenor / 9)) - 0.28 * tenor / 30,
+                observations: [0.055, -0.035, 0.028, -0.052, 0.043, -0.026, 0.038],
+                levelMove: 0.075, slopeMove: 0.10, curvatureMove: 0.08,
+                residualMove: 0.035, residualWobble: 0.012
             },
             asw: {
-                label: '€STR ASW spread', unit: 'bp', min: 20, max: 80, step: 10,
-                subtitle: 'Illustrative €STR asset-swap spread curve and relative-value residuals',
-                base: tenor => 29 + 35 * (1 - Math.exp(-tenor / 11)) + 3 * tenor / 30,
-                residualScale: 100,
-                levelMove: 3.2,
-                slopeMove: 4.0,
-                curvatureMove: 3.0,
-                decimals: 1
+                label: '€STR ASW spread', unit: 'bp', min: 20, max: 80, step: 10, decimals: 0,
+                subtitle: 'Illustrative €STR ASW spread curve · basis points',
+                // A gently humped ASW term structure, distinct from the rising yield curve.
+                base: tenor => 34 + 31 * (1 - Math.exp(-tenor / 8)) - 0.42 * tenor + 0.020 * tenor * tenor,
+                observations: [5.0, -4.5, 3.2, -6.0, 4.8, -3.4, 5.5],
+                levelMove: 2.1, slopeMove: 3.8, curvatureMove: 5.2,
+                residualMove: 3.0, residualWobble: 1.1
             },
             zspread: {
-                label: '€STR Z-spread', unit: 'bp', min: 30, max: 100, step: 10,
-                subtitle: 'Illustrative €STR Z-spread curve and relative-value residuals',
-                base: tenor => 40 + 43 * (1 - Math.exp(-tenor / 12)) + 5 * tenor / 30,
-                residualScale: 100,
-                levelMove: 3.8,
-                slopeMove: 4.5,
-                curvatureMove: 3.5,
-                decimals: 1
+                label: '€STR Z-spread', unit: 'bp', min: 30, max: 110, step: 10, decimals: 0,
+                subtitle: 'Illustrative €STR Z-spread curve · basis points',
+                // A steeper, convex Z-spread term structure with a different scale and shape.
+                base: tenor => 42 + 0.78 * tenor + 0.012 * tenor * tenor + 7 * Math.exp(-Math.pow((tenor - 8) / 5, 2)),
+                observations: [-7.0, 5.5, -4.2, 7.5, -6.0, 4.6, -5.2],
+                levelMove: 3.0, slopeMove: 5.0, curvatureMove: 4.0,
+                residualMove: 4.2, residualWobble: 1.5
             }
         };
         let selectedMetric = 'yield';
@@ -403,44 +200,30 @@
         let cycleStart;
         let lastWidth = 0;
         let lastHeight = 0;
-
         document.querySelectorAll('.metric-button').forEach(button => {
             button.addEventListener('click', () => {
                 selectedMetric = button.dataset.metric;
-                document.querySelectorAll('.metric-button').forEach(option => {
-                    option.setAttribute('aria-pressed', String(option === button));
-                });
+                document.querySelectorAll('.metric-button').forEach(option => option.setAttribute('aria-pressed', String(option === button)));
                 subtitle.textContent = curveConfigs[selectedMetric].subtitle;
             });
         });
-
         function drawYieldCurve(timestamp) {
             if (cycleStart === undefined) cycleStart = timestamp;
             const phase = reducedMotion ? 0 : ((timestamp - cycleStart) % cycleDuration) / cycleDuration * Math.PI * 2;
             const rect = yieldCanvas.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
-            const width = rect.width;
-            const height = rect.height;
-
+            const width = rect.width; const height = rect.height;
             if (width !== lastWidth || height !== lastHeight || yieldCanvas.width !== Math.round(width * dpr)) {
-                yieldCanvas.width = Math.round(width * dpr);
-                yieldCanvas.height = Math.round(height * dpr);
-                lastWidth = width;
-                lastHeight = height;
+                yieldCanvas.width = Math.round(width * dpr); yieldCanvas.height = Math.round(height * dpr);
+                lastWidth = width; lastHeight = height;
             }
             yieldCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
             yieldCtx.clearRect(0, 0, width, height);
-
             const config = curveConfigs[selectedMetric];
-            const left = 60;
-            const right = width - 18;
-            const top = 22;
-            const bottom = height - 34;
-            const plotWidth = right - left;
-            const plotHeight = bottom - top;
+            const left = 60; const right = width - 18; const top = 22; const bottom = height - 34;
+            const plotWidth = right - left; const plotHeight = bottom - top;
             const xAt = tenor => left + tenor / 30 * plotWidth;
             const yAt = value => bottom - (value - config.min) / (config.max - config.min) * plotHeight;
-
             const curveValue = tenor => {
                 const t = tenor / 30;
                 return config.base(tenor)
@@ -448,82 +231,47 @@
                     + config.slopeMove * Math.sin(phase + 1.1) * (t - 0.42)
                     + config.curvatureMove * Math.sin(phase * 2 - 0.6) * Math.sin(Math.PI * t);
             };
-
-            // Horizontal value guides and axis labels.
+            // Horizontal value guides and labels.
             yieldCtx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-            yieldCtx.textAlign = 'right';
-            yieldCtx.textBaseline = 'middle';
+            yieldCtx.textAlign = 'right'; yieldCtx.textBaseline = 'middle';
             for (let value = config.min; value <= config.max + config.step * 0.001; value += config.step) {
                 const y = yAt(value);
-                yieldCtx.beginPath();
-                yieldCtx.moveTo(left, y);
-                yieldCtx.lineTo(right, y);
-                yieldCtx.strokeStyle = 'rgba(139, 148, 158, 0.15)';
-                yieldCtx.lineWidth = 1;
-                yieldCtx.stroke();
+                yieldCtx.beginPath(); yieldCtx.moveTo(left, y); yieldCtx.lineTo(right, y);
+                yieldCtx.strokeStyle = 'rgba(139, 148, 158, 0.15)'; yieldCtx.lineWidth = 1; yieldCtx.stroke();
                 yieldCtx.fillStyle = 'rgba(139, 148, 158, 0.78)';
                 yieldCtx.fillText(`${value.toFixed(config.decimals)}${config.unit === '%' ? '%' : ''}`, left - 10, y);
             }
-
-            // Tenor grid / labels.
             [2, 5, 10, 15, 20, 30].forEach(tenor => {
                 const x = xAt(tenor);
-                yieldCtx.beginPath();
-                yieldCtx.moveTo(x, top);
-                yieldCtx.lineTo(x, bottom);
-                yieldCtx.strokeStyle = 'rgba(139, 148, 158, 0.09)';
-                yieldCtx.lineWidth = 1;
-                yieldCtx.stroke();
+                yieldCtx.beginPath(); yieldCtx.moveTo(x, top); yieldCtx.lineTo(x, bottom);
+                yieldCtx.strokeStyle = 'rgba(139, 148, 158, 0.09)'; yieldCtx.lineWidth = 1; yieldCtx.stroke();
                 yieldCtx.fillStyle = 'rgba(139, 148, 158, 0.84)';
-                yieldCtx.textAlign = 'center';
-                yieldCtx.textBaseline = 'top';
-                yieldCtx.fillText(`${tenor}Y`, x, bottom + 10);
+                yieldCtx.textAlign = 'center'; yieldCtx.textBaseline = 'top'; yieldCtx.fillText(`${tenor}Y`, x, bottom + 10);
             });
-
-            // Fitted curve.
+            // Fitted metric-specific curve.
             yieldCtx.beginPath();
             for (let i = 0; i <= 180; i++) {
-                const tenor = 30 * i / 180;
-                const x = xAt(tenor);
-                const y = yAt(curveValue(tenor));
-                if (i === 0) yieldCtx.moveTo(x, y);
-                else yieldCtx.lineTo(x, y);
+                const tenor = 30 * i / 180; const x = xAt(tenor); const y = yAt(curveValue(tenor));
+                if (i === 0) yieldCtx.moveTo(x, y); else yieldCtx.lineTo(x, y);
             }
-            yieldCtx.strokeStyle = '#58a6ff';
-            yieldCtx.lineWidth = 2.5;
-            yieldCtx.lineJoin = 'round';
-            yieldCtx.stroke();
-
-            // For yields, a higher yield than fitted is cheap/buy; for spreads, wider is cheap/buy.
-            observations.forEach((point, index) => {
-                const residual = point.residual * config.residualScale
-                    + config.residualScale * 0.035 * Math.sin(phase + index * 0.9)
-                    + config.residualScale * 0.012 * Math.sin(phase * 2 + index * 1.4);
-                const fitted = curveValue(point.tenor);
-                const observed = fitted + residual;
-                const x = xAt(point.tenor);
-                const fittedY = yAt(fitted);
-                const pointY = yAt(observed);
-                const isBuy = residual > 0;
-                const color = isBuy ? '#3fb950' : '#f85149';
-
-                yieldCtx.beginPath();
-                yieldCtx.moveTo(x, fittedY);
-                yieldCtx.lineTo(x, pointY);
-                yieldCtx.strokeStyle = `${color}bb`;
-                yieldCtx.lineWidth = 1.5;
-                yieldCtx.stroke();
-
-                yieldCtx.beginPath();
-                yieldCtx.arc(x, pointY, 4.8, 0, Math.PI * 2);
-                yieldCtx.fillStyle = color;
-                yieldCtx.fill();
-                yieldCtx.lineWidth = 1.5;
-                yieldCtx.strokeStyle = '#0d1117';
-                yieldCtx.stroke();
+            yieldCtx.strokeStyle = '#58a6ff'; yieldCtx.lineWidth = 2.5; yieldCtx.lineJoin = 'round'; yieldCtx.stroke();
+            // Higher yield or wider spread than fitted = cheap/buy (green); tighter/richer = sell (red).
+            const tenors = [2, 5, 7, 10, 15, 20, 30];
+            config.observations.forEach((baseResidual, index) => {
+                const residual = baseResidual
+                    + config.residualMove * Math.sin(phase + index * 0.9)
+                    + config.residualWobble * Math.sin(phase * 2 + index * 1.4);
+                const tenor = tenors[index];
+                const fitted = curveValue(tenor); const observed = fitted + residual;
+                const x = xAt(tenor); const fittedY = yAt(fitted); const pointY = yAt(observed);
+                const color = residual > 0 ? '#3fb950' : '#f85149';
+                yieldCtx.beginPath(); yieldCtx.moveTo(x, fittedY); yieldCtx.lineTo(x, pointY);
+                yieldCtx.strokeStyle = `${color}bb`; yieldCtx.lineWidth = 1.5; yieldCtx.stroke();
+                yieldCtx.beginPath(); yieldCtx.arc(x, pointY, 4.8, 0, Math.PI * 2);
+                yieldCtx.fillStyle = color; yieldCtx.fill(); yieldCtx.lineWidth = 1.5;
+                yieldCtx.strokeStyle = '#0d1117'; yieldCtx.stroke();
             });
-
-            yieldCanvas.setAttribute('aria-label', `Illustrative ${config.label} curve. Green points are buy signals where values are above the fitted curve; red points are sell signals where values are below. Synthetic data, not market quotes.`);
+            yieldCanvas.setAttribute('aria-label', `Illustrative ${config.label} curve. Green points indicate buy signals where values are above the fitted curve; red points indicate sell signals where values are below. Synthetic data, not market quotes.`);
             if (!reducedMotion) requestAnimationFrame(drawYieldCurve);
         }
         requestAnimationFrame(drawYieldCurve);
