@@ -19,7 +19,7 @@
     <title>j_glover1@sky.com | John Glover, Ph.D. — Director, Algo eRisk Quant Trader</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="John Glover, Ph.D. — Director, Algo eRisk Quant Trader at HSBC, formerly Morgan Stanley. Specialist in European Rates, SSA, EGB relative value, and electronic risk.">
+    <meta name="description" content="John Glover, Ph.D. — Director, Algo eRisk Quant Trader at HSBC, formerly Morgan Stanley. Specialist in European Rates, SSA, EGB relative value, and electronic risk management.">
     <meta name="keywords" content="John Glover, HSBC, Morgan Stanley, Quant Trader, Algo eRisk, SSA, EGB, European Rates, Relative Value, Quantitative Finance, Imperial College London">
     <meta name="author" content="John Glover">
 
@@ -132,10 +132,13 @@
             border-radius: 6px;
             font-weight: 500;
             font-size: 0.9rem;
-            /* Disabled interaction styles */
-            pointer-events: none;
-            opacity: 0.7;
-            cursor: not-allowed;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .btn:hover,
+        .btn:focus-visible {
+            background-color: #30363d;
+            border-color: #58a6ff;
         }
 
         .socials {
@@ -164,16 +167,15 @@
 
     <div class="container">
         <h1>John Glover, Ph.D.</h1>
-        <p class="subtitle">Director, Algo eRisk Quant Trader | European Rates & SSA Specialist</p>
+        <p class="subtitle">Director, Algo eRisk Quant Trader | European Rates &amp; SSA Specialist</p>
         
         <p class="bio">
             Specializing in relative value, automated flow-hedging, and electronic risk management across European government bonds (EGB) and SSA spread markets.
         </p>
 
         <div>
-            <!-- Non-clickable status badge -->
-            <a href="#" class="btn" tabindex="-1" aria-disabled="true">
-                ⚙️ Expanded profile in development
+            <a href="johnGlover_ratesQuant_CV.pdf" class="btn" target="_blank" rel="noopener noreferrer" aria-label="View John Glover's CV (PDF)">
+                View my CV (PDF)
             </a>
         </div>
 
