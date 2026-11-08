@@ -40,8 +40,8 @@
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 32px; background: #0d1117; color: #e6edf3; position: relative; overflow-x: hidden; }
     #math-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
     .page-content { width: min(1120px, 100%); display: flex; flex-direction: column; align-items: center; gap: 24px; z-index: 1; }
-    .chart-panel { width: 100%; padding: 22px 26px 18px; background: linear-gradient(145deg, rgba(20,27,38,.97), rgba(13,17,23,.95)); border: 1px solid rgba(139,148,158,.25); border-radius: 12px; box-shadow: 0 18px 42px rgba(0,0,0,.3); }
-    .chart-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .chart-panel, .growth-panel { width: 100%; padding: 22px 26px 18px; background: linear-gradient(145deg, rgba(20,27,38,.97), rgba(13,17,23,.95)); border: 1px solid rgba(139,148,158,.25); border-radius: 12px; box-shadow: 0 18px 42px rgba(0,0,0,.3); }
+    .chart-heading, .growth-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
     .chart-title { margin: 0; color: #e6edf3; font-size: .9rem; font-weight: 600; letter-spacing: .04em; }
     .chart-subtitle { margin: 5px 0 0; color: #a4acb7; font-size: .76rem; }
     .chart-badge { flex: 0 0 auto; color: #8b949e; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
@@ -58,8 +58,7 @@
     .legend-item { display: inline-flex; align-items: center; gap: 7px; }
     .legend-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
     .legend-curve { background: #58a6ff; } .legend-buy { background: #3fb950; } .legend-sell { background: #f85149; }
-    .growth-panel { width: 100%; padding: 22px 26px 18px; background: linear-gradient(145deg, rgba(20,27,38,.97), rgba(13,17,23,.95)); border: 1px solid rgba(139,148,158,.25); border-radius: 12px; box-shadow: 0 18px 42px rgba(0,0,0,.3); }
-    .growth-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .growth-header { align-items: center; }
     .growth-stats { display: flex; align-items: center; gap: 18px; color: #a4acb7; font-size: .75rem; }
     .growth-stats strong { color: #e6edf3; font-variant-numeric: tabular-nums; }
     .growth-stat-label { color: #8b949e; margin-right: 5px; }
@@ -75,16 +74,7 @@
     .socials { margin-top: 2rem; font-size: .9rem; color: #8b949e; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
     .socials a { color: #58a6ff; text-decoration: none; margin: 0 4px; }
     .socials a:hover { color: #79c0ff; text-decoration: underline; }
-    @media (max-width: 700px) {
-      body { padding: 18px 14px; } .page-content { gap: 18px; }
-      .chart-panel, .growth-panel { padding: 17px 14px 14px; }
-      #yield-canvas { height: 260px; } #growth-canvas { height: 220px; }
-      .chart-badge { display: none; } .container { padding: 2rem 1.25rem; }
-      h1 { font-size: 1.9rem; } .chart-legend { gap: 12px; font-size: .67rem; }
-      .growth-header { align-items: flex-start; flex-direction: column; }
-      .growth-stats { gap: 12px; flex-wrap: wrap; } .growth-footer { align-items: flex-start; flex-direction: column; }
-      .motion-status { margin-left: 0; }
-    }
+    @media (max-width: 700px) { body { padding: 18px 14px; } .page-content { gap: 18px; } .chart-panel, .growth-panel { padding: 17px 14px 14px; } #yield-canvas { height: 260px; } #growth-canvas { height: 220px; } .chart-badge { display: none; } .container { padding: 2rem 1.25rem; } h1 { font-size: 1.9rem; } .chart-legend { gap: 12px; font-size: .67rem; } .growth-header { align-items: flex-start; flex-direction: column; } .growth-stats { gap: 12px; flex-wrap: wrap; } .growth-footer { align-items: flex-start; flex-direction: column; } .motion-status { margin-left: 0; } }
   </style>
 </head>
 <body>
@@ -103,22 +93,14 @@
       <canvas id="yield-canvas" role="img" aria-label="Animated illustrative government bond yield curve. Green points indicate buy signals; red points indicate sell signals. Synthetic data, not market quotes."></canvas>
       <div class="chart-legend" aria-hidden="true"><span class="legend-item"><span class="legend-dot legend-curve"></span>Fitted curve</span><span class="legend-item"><span class="legend-dot legend-buy"></span>Buy · cheap / wider</span><span class="legend-item"><span class="legend-dot legend-sell"></span>Sell · rich / tighter</span></div>
     </section>
-
     <section class="growth-panel" aria-labelledby="growth-title">
       <div class="growth-header">
         <div><h2 class="chart-title" id="growth-title">Exponential growth · particle model</h2><p class="chart-subtitle">The population doubles periodically; collisions remove pairs. An illustrative, bounded simulation.</p></div>
-        <div class="growth-stats" aria-live="polite">
-          <span><span class="growth-stat-label">Balls</span><strong id="ball-count">6</strong></span>
-          <span><span class="growth-stat-label">Doublings</span><strong id="doubling-count">0</strong></span>
-        </div>
+        <div class="growth-stats" aria-live="polite"><span><span class="growth-stat-label">Balls</span><strong id="ball-count">6</strong></span><span><span class="growth-stat-label">Doublings</span><strong id="doubling-count">0</strong></span></div>
       </div>
       <canvas id="growth-canvas" role="img" aria-label="Animated simulation of balls bouncing, colliding and disappearing in pairs while the population doubles every few seconds."></canvas>
-      <div class="growth-footer">
-        <span><span class="growth-key">●</span> Each pulse duplicates every surviving ball; collisions eliminate pairs.</span>
-        <button class="growth-button" id="growth-reset" type="button">Restart simulation</button>
-      </div>
+      <div class="growth-footer"><span><span class="growth-key">●</span> Each pulse duplicates every surviving ball; collisions eliminate pairs.</span><div><span id="growth-status" aria-live="polite">Simulation running</span> &nbsp; <button class="growth-button" id="growth-toggle" type="button">Pause balls</button> <button class="growth-button" id="growth-reset" type="button">Restart simulation</button></div></div>
     </section>
-
     <section class="container" aria-label="Profile">
       <h1>John Glover, Ph.D.</h1>
       <p class="subtitle">Director, Algo eRisk Quant Trader | European Rates &amp; SSA Specialist</p>
@@ -134,140 +116,59 @@
   </main>
   <script>
     // Low-key ambient mathematical notation.
-    const bgCanvas = document.getElementById('math-canvas');
-    const bgCtx = bgCanvas.getContext('2d');
-    const symbols = ['∑', '∫', '∂', 'σ', '∞', 'Δ', 'd/dt', 'λ', 'μ', 'θ', '∇', 'N(d1)', 'ASW', 'EGB/SSA', '€STR', 'χ²'];
+    const bgCanvas = document.getElementById('math-canvas'), bgCtx = bgCanvas.getContext('2d');
+    const symbols = ['∑','∫','∂','σ','∞','Δ','d/dt','λ','μ','θ','∇','N(d1)','ASW','EGB/SSA','€STR','χ²'];
     const particles = [];
-    function resizeBackground() {
-      const dpr = window.devicePixelRatio || 1;
-      bgCanvas.width = Math.round(window.innerWidth * dpr);
-      bgCanvas.height = Math.round(window.innerHeight * dpr);
-      bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    window.addEventListener('resize', resizeBackground);
-    resizeBackground();
+    function resizeBackground() { const dpr=devicePixelRatio||1; bgCanvas.width=Math.round(innerWidth*dpr); bgCanvas.height=Math.round(innerHeight*dpr); bgCtx.setTransform(dpr,0,0,dpr,0,0); }
+    addEventListener('resize',resizeBackground); resizeBackground();
     class Particle {
-      constructor() {
-        this.x = Math.random() * window.innerWidth; this.y = Math.random() * window.innerHeight;
-        this.vx = (Math.random() - .5) * .4; this.vy = (Math.random() - .5) * .4;
-        this.text = symbols[Math.floor(Math.random() * symbols.length)];
-        this.size = Math.random() * 12 + 11; this.opacity = Math.random() * .18 + .05;
-      }
-      update() {
-        this.x += this.vx; this.y += this.vy;
-        if (this.x < -60) this.x = window.innerWidth + 50;
-        if (this.x > window.innerWidth + 60) this.x = -50;
-        if (this.y < -60) this.y = window.innerHeight + 50;
-        if (this.y > window.innerHeight + 60) this.y = -50;
-      }
-      draw() { bgCtx.fillStyle = `rgba(88,166,255,${this.opacity})`; bgCtx.font = `${this.size}px monospace`; bgCtx.fillText(this.text, this.x, this.y); }
+      constructor() { this.x=Math.random()*innerWidth; this.y=Math.random()*innerHeight; this.vx=(Math.random()-.5)*.4; this.vy=(Math.random()-.5)*.4; this.text=symbols[Math.floor(Math.random()*symbols.length)]; this.size=Math.random()*12+11; this.opacity=Math.random()*.18+.05; }
+      update() { this.x+=this.vx; this.y+=this.vy; if(this.x< -60)this.x=innerWidth+50; if(this.x>innerWidth+60)this.x= -50; if(this.y< -60)this.y=innerHeight+50; if(this.y>innerHeight+60)this.y= -50; }
+      draw() { bgCtx.fillStyle=`rgba(88,166,255,${this.opacity})`; bgCtx.font=`${this.size}px monospace`; bgCtx.fillText(this.text,this.x,this.y); }
     }
-    for (let i = 0; i < 36; i++) particles.push(new Particle());
-    function animateBackground() {
-      bgCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      particles.forEach(p => { p.update(); p.draw(); });
-      requestAnimationFrame(animateBackground);
-    }
+    for(let i=0;i<36;i++)particles.push(new Particle());
+    function animateBackground(){bgCtx.clearRect(0,0,innerWidth,innerHeight);particles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animateBackground);}
     animateBackground();
 
-    // Metric-specific synthetic curves. The whole fitted curve visibly changes over a 6-second loop.
-    const chart = document.getElementById('yield-canvas');
-    const ctx = chart.getContext('2d');
-    const subtitle = document.getElementById('chart-subtitle');
-    const status = document.getElementById('motion-status');
-    const motionToggle = document.getElementById('motion-toggle');
-    const tenors = [2, 5, 7, 10, 15, 20, 30];
-    const curves = {
-      yield: { label: 'Yield', unit: '%', min: 2, max: 4.5, step: .5, decimals: 1, color: '#58a6ff', subtitle: 'Yield curve · upward sloping, then flattening', residuals: [.055, -.035, .028, -.052, .043, -.026, .038], value(t, p) { const x=t/30; return 2.2+1.85*(1-Math.exp(-t/8.5))-.2*x+.28*Math.sin(p)*x+.16*Math.sin(p)*Math.sin(Math.PI*x); } },
-      asw: { label: '€STR ASW spread', unit: 'bp', min: 10, max: 85, step: 15, decimals: 0, color: '#d2a8ff', subtitle: 'ASW spread · distinct belly hump centred near 10Y', residuals: [5,-4.5,3.2,-6,4.8,-3.4,5.5], value(t, p) { const center=10+2.5*Math.sin(p); return 21+51*Math.exp(-Math.pow((t-center)/7.5,2))-.12*t+4*Math.sin(p)*t/30; } },
-      zspread: { label: '€STR Z-spread', unit: 'bp', min: 55, max: 135, step: 20, decimals: 0, color: '#f0883e', subtitle: 'Z-spread · falls into the belly, then rebounds sharply long-end', residuals: [-7,5.5,-4.2,7.5,-6,4.6,-5.2], value(t, p) { const x=t/30; return 119-4.1*t+.14*t*t+7*Math.sin(p)*(1-x)+5*Math.sin(p)*x; } }
+    // Distinct synthetic curves, animated on a six-second cycle.
+    const chart=document.getElementById('yield-canvas'),ctx=chart.getContext('2d');
+    const subtitle=document.getElementById('chart-subtitle'),motionStatus=document.getElementById('motion-status'),motionToggle=document.getElementById('motion-toggle');
+    const tenors=[2,5,7,10,15,20,30];
+    const curves={
+      yield:{label:'Yield',unit:'%',min:2,max:4.5,step:.5,decimals:1,color:'#58a6ff',subtitle:'Yield curve · upward sloping, then flattening',residuals:[.055,-.035,.028,-.052,.043,-.026,.038],value(t,p){const x=t/30;return 2.2+1.85*(1-Math.exp(-t/8.5))-.2*x+.28*Math.sin(p)*x+.16*Math.sin(p)*Math.sin(Math.PI*x);}},
+      asw:{label:'€STR ASW spread',unit:'bp',min:10,max:85,step:15,decimals:0,color:'#d2a8ff',subtitle:'ASW spread · distinct belly hump centred near 10Y',residuals:[5,-4.5,3.2,-6,4.8,-3.4,5.5],value(t,p){const center=10+2.5*Math.sin(p);return 21+51*Math.exp(-Math.pow((t-center)/7.5,2))-.12*t+4*Math.sin(p)*t/30;}},
+      zspread:{label:'€STR Z-spread',unit:'bp',min:55,max:135,step:20,decimals:0,color:'#f0883e',subtitle:'Z-spread · falls into the belly, then rebounds sharply long-end',residuals:[-7,5.5,-4.2,7.5,-6,4.6,-5.2],value(t,p){const x=t/30;return 119-4.1*t+.14*t*t+7*Math.sin(p)*(1-x)+5*Math.sin(p)*x;}}
     };
-    let metric = 'yield', paused = false, elapsedBeforePause = 0, lastFrameTime = null;
-    let previousWidth = 0, previousHeight = 0;
-    const loopMs = 6000;
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (reduceMotion.matches) { paused = true; motionToggle.textContent = 'Play animation'; status.textContent = 'Animation paused · reduced motion'; }
-    document.querySelectorAll('.metric-button').forEach(button => button.addEventListener('click', () => {
-      metric = button.dataset.metric;
-      document.querySelectorAll('.metric-button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-      subtitle.textContent = curves[metric].subtitle;
-    }));
-    motionToggle.addEventListener('click', () => {
-      paused = !paused; motionToggle.textContent = paused ? 'Play animation' : 'Pause animation';
-      status.textContent = paused ? 'Animation paused' : 'Animation running · 6s cycle'; lastFrameTime = null;
-    });
-    function drawChart(timestamp) {
-      if (lastFrameTime === null) lastFrameTime = timestamp;
-      if (!paused) elapsedBeforePause += timestamp - lastFrameTime;
-      lastFrameTime = timestamp;
-      const phase = (elapsedBeforePause % loopMs) / loopMs * Math.PI * 2;
-      const rect = chart.getBoundingClientRect(), width = rect.width, height = rect.height, dpr = window.devicePixelRatio || 1;
-      if (width > 0 && height > 0 && (width !== previousWidth || height !== previousHeight)) { chart.width = Math.round(width*dpr); chart.height = Math.round(height*dpr); previousWidth = width; previousHeight = height; }
-      if (width > 0 && height > 0) {
-        ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,width,height);
-        const cfg=curves[metric], left=66, right=width-18, top=22, bottom=height-34;
-        const xAt=t=>left+t/30*(right-left), yAt=v=>bottom-(v-cfg.min)/(cfg.max-cfg.min)*(bottom-top), curve=t=>cfg.value(t,phase);
-        ctx.font='11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'; ctx.textAlign='right'; ctx.textBaseline='middle';
-        for (let v=cfg.min;v<=cfg.max+cfg.step*.001;v+=cfg.step) { const y=yAt(v); ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(right,y);ctx.strokeStyle='rgba(139,148,158,.18)';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle='rgba(180,188,198,.9)';ctx.fillText(`${v.toFixed(cfg.decimals)}${cfg.unit==='%'?'%':' bp'}`,left-9,y); }
-        [2,5,10,15,20,30].forEach(t=>{const x=xAt(t);ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,bottom);ctx.strokeStyle='rgba(139,148,158,.1)';ctx.stroke();ctx.fillStyle='rgba(180,188,198,.9)';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(`${t}Y`,x,bottom+10);});
-        ctx.beginPath();for(let i=0;i<=240;i++){const t=30*i/240;if(i===0)ctx.moveTo(xAt(t),yAt(curve(t)));else ctx.lineTo(xAt(t),yAt(curve(t)));}
-        ctx.strokeStyle=cfg.color;ctx.lineWidth=4;ctx.lineJoin='round';ctx.shadowColor=cfg.color;ctx.shadowBlur=12;ctx.stroke();ctx.shadowBlur=0;
-        const markerTenor=((phase/(Math.PI*2))*30+30)%30,markerX=xAt(markerTenor),markerY=yAt(curve(markerTenor));
-        ctx.beginPath();ctx.arc(markerX,markerY,7,0,Math.PI*2);ctx.fillStyle='#f0f6fc';ctx.fill();ctx.lineWidth=3;ctx.strokeStyle=cfg.color;ctx.stroke();
-        cfg.residuals.forEach((base,i)=>{const t=tenors[i],residual=base+(cfg.unit==='%'?.055:7)*Math.sin(phase+i*.9),fitted=curve(t),observed=fitted+residual,x=xAt(t),fy=yAt(fitted),oy=yAt(observed),color=residual>0?'#3fb950':'#f85149';ctx.beginPath();ctx.moveTo(x,fy);ctx.lineTo(x,oy);ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();ctx.beginPath();ctx.arc(x,oy,5.5,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='#0d1117';ctx.stroke();});
-        chart.setAttribute('aria-label',`Animated illustrative ${cfg.label} curve: ${cfg.subtitle}. Green points indicate buy/cheap, red points indicate sell/rich. Synthetic data, not market quotes.`);
-      }
-      requestAnimationFrame(drawChart);
-    }
+    let metric='yield',chartPaused=false,elapsed=0,lastChartFrame=null,chartWidth=0,chartHeight=0;
+    const chartLoop=6000,reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
+    if(reduceMotion.matches){chartPaused=true;motionToggle.textContent='Play animation';motionStatus.textContent='Animation paused · reduced motion';}
+    document.querySelectorAll('.metric-button').forEach(button=>button.addEventListener('click',()=>{metric=button.dataset.metric;document.querySelectorAll('.metric-button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));subtitle.textContent=curves[metric].subtitle;}));
+    motionToggle.addEventListener('click',()=>{chartPaused=!chartPaused;motionToggle.textContent=chartPaused?'Play animation':'Pause animation';motionStatus.textContent=chartPaused?'Animation paused':'Animation running · 6s cycle';lastChartFrame=null;});
+    function drawChart(now){if(lastChartFrame===null)lastChartFrame=now;if(!chartPaused)elapsed+=now-lastChartFrame;lastChartFrame=now;const phase=(elapsed%chartLoop)/chartLoop*Math.PI*2;const rect=chart.getBoundingClientRect(),w=rect.width,h=rect.height,dpr=devicePixelRatio||1;if(w>0&&h>0){if(w!==chartWidth||h!==chartHeight){chart.width=Math.round(w*dpr);chart.height=Math.round(h*dpr);chartWidth=w;chartHeight=h;}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);const c=curves[metric],left=66,right=w-18,top=22,bottom=h-34,xAt=t=>left+t/30*(right-left),yAt=v=>bottom-(v-c.min)/(c.max-c.min)*(bottom-top),curve=t=>c.value(t,phase);ctx.font='11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';for(let v=c.min;v<=c.max+c.step*.001;v+=c.step){const y=yAt(v);ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(right,y);ctx.strokeStyle='rgba(139,148,158,.18)';ctx.stroke();ctx.fillStyle='rgba(180,188,198,.9)';ctx.fillText(`${v.toFixed(c.decimals)}${c.unit==='%'?'%':' bp'}`,left-9,y);} [2,5,10,15,20,30].forEach(t=>{const x=xAt(t);ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,bottom);ctx.strokeStyle='rgba(139,148,158,.1)';ctx.stroke();ctx.fillStyle='rgba(180,188,198,.9)';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(`${t}Y`,x,bottom+10);});ctx.beginPath();for(let i=0;i<=240;i++){const t=30*i/240;if(i===0)ctx.moveTo(xAt(t),yAt(curve(t)));else ctx.lineTo(xAt(t),yAt(curve(t)));}ctx.strokeStyle=c.color;ctx.lineWidth=4;ctx.lineJoin='round';ctx.shadowColor=c.color;ctx.shadowBlur=12;ctx.stroke();ctx.shadowBlur=0;const mt=((phase/(2*Math.PI))*30+30)%30;ctx.beginPath();ctx.arc(xAt(mt),yAt(curve(mt)),7,0,2*Math.PI);ctx.fillStyle='#f0f6fc';ctx.fill();ctx.lineWidth=3;ctx.strokeStyle=c.color;ctx.stroke();c.residuals.forEach((base,i)=>{const t=tenors[i],res=base+(c.unit==='%'?.055:7)*Math.sin(phase+i*.9),fy=yAt(curve(t)),oy=yAt(curve(t)+res),x=xAt(t),color=res>0?'#3fb950':'#f85149';ctx.beginPath();ctx.moveTo(x,fy);ctx.lineTo(x,oy);ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();ctx.beginPath();ctx.arc(x,oy,5.5,0,2*Math.PI);ctx.fillStyle=color;ctx.fill();});}requestAnimationFrame(drawChart);}
     requestAnimationFrame(drawChart);
 
-    // Bouncing-particle growth toy model. Doubling is periodic; collisions remove pairs.
-    const growthCanvas=document.getElementById('growth-canvas'), growthCtx=growthCanvas.getContext('2d');
-    const ballCountLabel=document.getElementById('ball-count'), doublingCountLabel=document.getElementById('doubling-count');
-    const resetGrowthButton=document.getElementById('growth-reset');
-    const growthColors=['#58a6ff','#d2a8ff','#3fb950','#f0883e','#79c0ff','#ff7b72'];
-    const initialPopulation=6, maxPopulation=96, doublingInterval=2500, growthDuration=30000;
-    let balls=[], generation=0, growthElapsed=0, lastGrowthFrame=null, lastDoubleAt=0, previousGrowthWidth=0, previousGrowthHeight=0, growthPaused=reduceMotion.matches;
-    function spawnBall(x,y,color) {
-      const rect=growthCanvas.getBoundingClientRect(), r=5+Math.random()*2;
-      return {x:x ?? r+Math.random()*Math.max(1,rect.width-2*r), y:y ?? r+Math.random()*Math.max(1,rect.height-2*r), vx:(Math.random()-.5)*100, vy:(Math.random()-.5)*100, r, color:color || growthColors[Math.floor(Math.random()*growthColors.length)]};
-    }
-    function resetGrowth() { balls=Array.from({length:initialPopulation},()=>spawnBall()); generation=0; growthElapsed=0; lastDoubleAt=0; lastGrowthFrame=null; }
-    resetGrowth();
-    resetGrowthButton.addEventListener('click',resetGrowth);
-    function drawGrowth(timestamp) {
-      if(lastGrowthFrame===null) lastGrowthFrame=timestamp;
-      const dt=Math.min((timestamp-lastGrowthFrame)/1000,.04); lastGrowthFrame=timestamp;
-      if(!growthPaused) growthElapsed+=dt*1000;
-      const rect=growthCanvas.getBoundingClientRect(), width=rect.width, height=rect.height, dpr=window.devicePixelRatio||1;
-      if(width>0&&height>0&&(width!==previousGrowthWidth||height!==previousGrowthHeight)) { growthCanvas.width=Math.round(width*dpr);growthCanvas.height=Math.round(height*dpr);previousGrowthWidth=width;previousGrowthHeight=height; }
-      if(width>0&&height>0) {
-        growthCtx.setTransform(dpr,0,0,dpr,0,0);growthCtx.clearRect(0,0,width,height);
-        if(!growthPaused) {
-          balls.forEach(ball=>{ball.x+=ball.vx*dt;ball.y+=ball.vy*dt;if(ball.x<ball.r){ball.x=ball.r;ball.vx=Math.abs(ball.vx);}if(ball.x>width-ball.r){ball.x=width-ball.r;ball.vx=-Math.abs(ball.vx);}if(ball.y<ball.r){ball.y=ball.r;ball.vy=Math.abs(ball.vy);}if(ball.y>height-ball.r){ball.y=height-ball.r;ball.vy=-Math.abs(ball.vy);}});
-          // Contact eliminates both balls. A small visual burst marks each collision.
-          const removed=new Set();
-          for(let i=0;i<balls.length;i++) if(!removed.has(i)) for(let j=i+1;j<balls.length;j++) if(!removed.has(j)) {
-            const a=balls[i],b=balls[j],dx=b.x-a.x,dy=b.y-a.y,rr=a.r+b.r;
-            if(dx*dx+dy*dy<rr*rr && Math.random()<.018) { removed.add(i);removed.add(j);break; }
-          }
-          if(removed.size) balls=balls.filter((_,i)=>!removed.has(i));
-          // Duplicate the live population at regular intervals; cap and restart for a bounded demo.
-          if(growthElapsed-lastDoubleAt>=doublingInterval) {
-            lastDoubleAt+=doublingInterval;generation++;
-            if(balls.length*2>maxPopulation) resetGrowth();
-            else { const originals=balls.slice(); originals.forEach(ball=>balls.push(spawnBall(ball.x,ball.y,ball.color))); }
-          }
-          if(growthElapsed>=growthDuration) resetGrowth();
-        }
-        // Faint floor guides give the particle field a contained, lab-like appearance.
-        growthCtx.strokeStyle='rgba(139,148,158,.08)';growthCtx.lineWidth=1;
-        for(let y=height-24;y>0;y-=32){growthCtx.beginPath();growthCtx.moveTo(0,y);growthCtx.lineTo(width,y);growthCtx.stroke();}
-        balls.forEach(ball=>{growthCtx.beginPath();growthCtx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);growthCtx.fillStyle=ball.color;growthCtx.shadowColor=ball.color;growthCtx.shadowBlur=10;growthCtx.fill();growthCtx.shadowBlur=0;growthCtx.beginPath();growthCtx.arc(ball.x-ball.r*.3,ball.y-ball.r*.3,Math.max(1,ball.r*.22),0,Math.PI*2);growthCtx.fillStyle='rgba(255,255,255,.65)';growthCtx.fill();});
-      }
-      ballCountLabel.textContent=String(balls.length);doublingCountLabel.textContent=String(generation);
-      requestAnimationFrame(drawGrowth);
-    }
+    // Bouncing-ball exponential-growth model. Start paused only when the device requests reduced motion.
+    const growthCanvas=document.getElementById('growth-canvas'),gctx=growthCanvas.getContext('2d');
+    const countLabel=document.getElementById('ball-count'),doublingLabel=document.getElementById('doubling-count'),growthStatus=document.getElementById('growth-status'),growthToggle=document.getElementById('growth-toggle'),resetButton=document.getElementById('growth-reset');
+    const ballColors=['#58a6ff','#d2a8ff','#3fb950','#f0883e','#79c0ff','#ff7b72'];
+    const startCount=6,maxCount=96,doubleEvery=2200,simulationLimit=24000;
+    let balls=[],doublings=0,simTime=0,lastSimFrame=null,lastDouble=0,canvasWidth=0,canvasHeight=0;
+    let ballsPaused=reduceMotion.matches;
+    function newBall(x,y,color){const r=6+Math.random()*1.5,rect=growthCanvas.getBoundingClientRect(),angle=Math.random()*Math.PI*2,speed=125+Math.random()*95;return{x:x??r+Math.random()*Math.max(1,rect.width-2*r),y:y??r+Math.random()*Math.max(1,rect.height-2*r),vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,r,color:color||ballColors[Math.floor(Math.random()*ballColors.length)]};}
+    function resetSimulation(){balls=Array.from({length:startCount},()=>newBall());doublings=0;simTime=0;lastDouble=0;lastSimFrame=null;}
+    function updateGrowthControl(){growthToggle.textContent=ballsPaused?'Play balls':'Pause balls';growthStatus.textContent=ballsPaused?'Simulation paused':'Simulation running';}
+    resetSimulation();updateGrowthControl();
+    resetButton.addEventListener('click',resetSimulation);
+    growthToggle.addEventListener('click',()=>{ballsPaused=!ballsPaused;lastSimFrame=null;updateGrowthControl();});
+    function drawGrowth(now){if(lastSimFrame===null)lastSimFrame=now;const dt=Math.min((now-lastSimFrame)/1000,.04);lastSimFrame=now;const rect=growthCanvas.getBoundingClientRect(),w=rect.width,h=rect.height,dpr=devicePixelRatio||1;if(w>0&&h>0){if(w!==canvasWidth||h!==canvasHeight){growthCanvas.width=Math.round(w*dpr);growthCanvas.height=Math.round(h*dpr);canvasWidth=w;canvasHeight=h;}gctx.setTransform(dpr,0,0,dpr,0,0);gctx.clearRect(0,0,w,h);
+      if(!ballsPaused){simTime+=dt*1000;for(const b of balls){b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.x-b.r<0){b.x=b.r;b.vx=Math.abs(b.vx);}else if(b.x+b.r>w){b.x=w-b.r;b.vx=-Math.abs(b.vx);}if(b.y-b.r<0){b.y=b.r;b.vy=Math.abs(b.vy);}else if(b.y+b.r>h){b.y=h-b.r;b.vy=-Math.abs(b.vy);}}
+        const removed=new Set();for(let i=0;i<balls.length;i++){if(removed.has(i))continue;for(let j=i+1;j<balls.length;j++){if(removed.has(j))continue;const a=balls[i],b=balls[j],dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy),minDist=a.r+b.r;if(dist>0&&dist<minDist){const nx=dx/dist,ny=dy/dist,relative=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;if(relative>0){a.vx-=relative*nx;a.vy-=relative*ny;b.vx+=relative*nx;b.vy+=relative*ny;}const overlap=(minDist-dist)/2;a.x-=nx*overlap;a.y-=ny*overlap;b.x+=nx*overlap;b.y+=ny*overlap;if(Math.random()<.045){removed.add(i);removed.add(j);}break;}}}if(removed.size)balls=balls.filter((_,i)=>!removed.has(i));
+        if(simTime-lastDouble>=doubleEvery){lastDouble+=doubleEvery;if(balls.length*2>maxCount){resetSimulation();}else{const originals=balls.slice();for(const b of originals){const angle=Math.random()*Math.PI*2,offset=14;balls.push(newBall(Math.max(8,Math.min(w-8,b.x+Math.cos(angle)*offset)),Math.max(8,Math.min(h-8,b.y+Math.sin(angle)*offset)),b.color));}doublings++;}}
+        if(simTime>=simulationLimit)resetSimulation();}
+      // Draw a motion trail so displacement is easy to notice.
+      gctx.strokeStyle='rgba(139,148,158,.07)';gctx.lineWidth=1;for(let y=h-24;y>0;y-=32){gctx.beginPath();gctx.moveTo(0,y);gctx.lineTo(w,y);gctx.stroke();}
+      for(const b of balls){gctx.beginPath();gctx.arc(b.x,b.y,b.r,0,2*Math.PI);gctx.fillStyle=b.color;gctx.shadowColor=b.color;gctx.shadowBlur=12;gctx.fill();gctx.shadowBlur=0;gctx.beginPath();gctx.arc(b.x-b.r*.3,b.y-b.r*.3,Math.max(1,b.r*.22),0,2*Math.PI);gctx.fillStyle='rgba(255,255,255,.7)';gctx.fill();}}
+      countLabel.textContent=String(balls.length);doublingLabel.textContent=String(doublings);requestAnimationFrame(drawGrowth);}
     requestAnimationFrame(drawGrowth);
   </script>
 </body>
