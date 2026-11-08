@@ -7,7 +7,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-2TTW4ZZGMK');
     </script>
 
@@ -15,34 +14,21 @@
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Email included in the front of the browser tab title -->
     <title>j_glover1@sky.com | John Glover, Ph.D. — Director, Algo eRisk Quant Trader</title>
-
-    <!-- SEO Meta Tags -->
     <meta name="description" content="John Glover, Ph.D. — Director, Algo eRisk Quant Trader at HSBC, formerly Morgan Stanley. Specialist in European Rates, SSA, EGB relative value, and electronic risk management.">
     <meta name="keywords" content="John Glover, HSBC, Morgan Stanley, Quant Trader, Algo eRisk, SSA, EGB, European Rates, Relative Value, Quantitative Finance, Imperial College London">
     <meta name="author" content="John Glover">
 
-    <!-- JSON-LD Structured Data Schema for Google -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "John Glover",
       "jobTitle": "Director, Algo eRisk Quant Trader",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "HSBC"
-      },
+      "worksFor": { "@type": "Organization", "name": "HSBC" },
       "alumniOf": [
-        {
-          "@type": "EducationalOrganization",
-          "name": "Imperial College London"
-        },
-        {
-          "@type": "Organization",
-          "name": "Morgan Stanley"
-        }
+        { "@type": "EducationalOrganization", "name": "Imperial College London" },
+        { "@type": "Organization", "name": "Morgan Stanley" }
       ],
       "url": "https://johnTheGlove.com",
       "sameAs": [
@@ -50,20 +36,15 @@
         "https://instagram.com/johnTheGlove"
       ],
       "knowsAbout": [
-        "Algorithmic Trading",
-        "eRisk",
-        "European Government Bonds (EGB)",
+        "Algorithmic Trading", "eRisk", "European Government Bonds (EGB)",
         "Supranational, Agency and Covered Bonds (SSA)",
-        "Relative Value Trading",
-        "Quantitative Finance"
+        "Relative Value Trading", "Quantitative Finance"
       ]
     }
     </script>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
@@ -71,80 +52,97 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 32px;
             background-color: #0d1117;
             color: #e6edf3;
-            overflow: hidden;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* Animation Canvas Background */
         #math-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
+            position: fixed;
+            inset: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            z-index: 0;
             pointer-events: none;
+        }
+
+        .page-content {
+            width: min(1120px, 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+            z-index: 1;
         }
 
         .yield-chart {
-            position: fixed;
-            top: 24px;
-            left: 24px;
-            z-index: 2;
-            width: 270px;
-            padding: 14px 16px 12px;
-            background: rgba(13, 17, 23, 0.72);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            backdrop-filter: blur(8px);
-            pointer-events: none;
+            width: 100%;
+            padding: 22px 26px 18px;
+            background: linear-gradient(145deg, rgba(20, 27, 38, 0.94), rgba(13, 17, 23, 0.88));
+            border: 1px solid rgba(139, 148, 158, 0.22);
+            border-radius: 12px;
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28), inset 0 1px rgba(255,255,255,0.035);
         }
 
-        .yield-chart h2 {
-            margin: 0 0 2px;
-            color: #c9d1d9;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
+        .chart-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
         }
 
-        .yield-chart p {
+        .chart-title {
             margin: 0;
+            color: #e6edf3;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .chart-subtitle {
+            margin: 5px 0 0;
+            color: #8b949e;
+            font-size: 0.76rem;
+        }
+
+        .chart-badge {
+            flex: 0 0 auto;
             color: #8b949e;
             font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
         }
 
         #yield-canvas {
             display: block;
             width: 100%;
-            height: 120px;
-            margin-top: 6px;
+            height: 300px;
+            margin-top: 12px;
         }
 
-        .yield-legend {
+        .chart-legend {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 22px;
+            padding-top: 4px;
             color: #8b949e;
-            font-size: 0.65rem;
+            font-size: 0.72rem;
         }
 
-        .yield-legend .cheap {
-            color: #f0883e;
-        }
-
-        .yield-legend .rich {
-            color: #3fb950;
-        }
+        .legend-item { display: inline-flex; align-items: center; gap: 7px; }
+        .legend-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+        .legend-curve { background: #58a6ff; }
+        .legend-cheap { background: #f0883e; }
+        .legend-rich { background: #3fb950; }
 
         .container {
+            width: min(650px, 100%);
             text-align: center;
             padding: 2.5rem;
-            max-width: 650px;
-            z-index: 3;
-            background: rgba(13, 17, 23, 0.75);
+            background: rgba(13, 17, 23, 0.86);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
@@ -152,7 +150,7 @@
         }
 
         h1 {
-            margin-bottom: 0.25rem;
+            margin: 0 0 0.25rem;
             font-size: 2.3rem;
             font-weight: 700;
             letter-spacing: -0.5px;
@@ -161,8 +159,7 @@
         .subtitle {
             font-size: 1.05rem;
             color: #58a6ff;
-            margin-top: 0;
-            margin-bottom: 1.25rem;
+            margin: 0 0 1.25rem;
             font-weight: 500;
         }
 
@@ -170,7 +167,7 @@
             color: #8b949e;
             font-size: 0.95rem;
             line-height: 1.6;
-            margin-bottom: 1.5rem;
+            margin: 0 0 1.5rem;
         }
 
         .btn {
@@ -186,8 +183,7 @@
             transition: background-color 0.2s ease, border-color 0.2s ease;
         }
 
-        .btn:hover,
-        .btn:focus-visible {
+        .btn:hover, .btn:focus-visible {
             background-color: #30363d;
             border-color: #58a6ff;
         }
@@ -205,260 +201,250 @@
             transition: color 0.2s ease;
         }
 
-        .socials a:hover {
-            color: #79c0ff;
-            text-decoration: underline;
-        }
+        .socials a:hover { color: #79c0ff; text-decoration: underline; }
 
         @media (max-width: 700px) {
-            .yield-chart {
-                display: none;
-            }
+            body { padding: 18px 14px; }
+            .page-content { gap: 18px; }
+            .yield-chart { padding: 17px 14px 14px; }
+            #yield-canvas { height: 240px; }
+            .chart-badge { display: none; }
+            .container { padding: 2rem 1.25rem; }
+            h1 { font-size: 1.9rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; }
         }
     </style>
 </head>
 <body>
+    <canvas id="math-canvas" aria-hidden="true"></canvas>
 
-    <!-- Background Animation Canvas -->
-    <canvas id="math-canvas"></canvas>
+    <main class="page-content">
+        <section class="yield-chart" aria-labelledby="yield-title">
+            <div class="chart-heading">
+                <div>
+                    <h2 class="chart-title" id="yield-title">Rates relative value · illustrative</h2>
+                    <p class="chart-subtitle">Indicative government bond yields and residuals to fitted curve</p>
+                </div>
+                <span class="chart-badge">Synthetic data · not market quotes</span>
+            </div>
+            <canvas id="yield-canvas" role="img" aria-label="Illustrative yield curve for 2, 5, 10, 15, 20 and 30 year bonds. Points above the fitted curve indicate relatively cheap bonds; points below indicate relatively rich bonds. Synthetic data, not market quotes."></canvas>
+            <div class="chart-legend" aria-hidden="true">
+                <span class="legend-item"><span class="legend-dot legend-curve"></span>Fitted curve</span>
+                <span class="legend-item"><span class="legend-dot legend-cheap"></span>Cheap · higher yield</span>
+                <span class="legend-item"><span class="legend-dot legend-rich"></span>Rich · lower yield</span>
+            </div>
+        </section>
 
-    <aside class="yield-chart" aria-label="Illustrative animated yield curve showing bonds trading rich or cheap relative to the curve">
-        <h2>Yield curve · relative value</h2>
-        <p>Illustrative market animation · 30-second cycle</p>
-        <canvas id="yield-canvas" role="img" aria-label="A slowly evolving yield curve with bond points above it marked cheap and points below it marked rich"></canvas>
-        <div class="yield-legend" aria-hidden="true">
-            <span class="cheap">● Cheap · higher yield</span>
-            <span class="rich">● Rich · lower yield</span>
-        </div>
-    </aside>
+        <section class="container" aria-label="Profile">
+            <h1>John Glover, Ph.D.</h1>
+            <p class="subtitle">Director, Algo eRisk Quant Trader | European Rates &amp; SSA Specialist</p>
+            <p class="bio">
+                Specializing in relative value, automated flow-hedging, and electronic risk management across European government bonds (EGB) and SSA spread markets.
+            </p>
+            <div>
+                <a href="johnGlover_ratesQuant_CV.pdf" class="btn" target="_blank" rel="noopener noreferrer" aria-label="Explore John Glover's professional experience (PDF)">
+                    Explore my experience
+                </a>
+            </div>
+            <div class="socials">
+                <a href="mailto:j_glover1@sky.com">Email</a>
+                <span>•</span>
+                <a href="https://twitter.com/johnTheGlove" target="_blank" rel="noopener noreferrer">X (@johnTheGlove)</a>
+                <span>•</span>
+                <a href="https://instagram.com/johnTheGlove" target="_blank" rel="noopener noreferrer">Instagram (@johnTheGlove)</a>
+            </div>
+        </section>
+    </main>
 
-    <div class="container">
-        <h1>John Glover, Ph.D.</h1>
-        <p class="subtitle">Director, Algo eRisk Quant Trader | European Rates &amp; SSA Specialist</p>
-        
-        <p class="bio">
-            Specializing in relative value, automated flow-hedging, and electronic risk management across European government bonds (EGB) and SSA spread markets.
-        </p>
-
-        <div>
-            <a href="johnGlover_ratesQuant_CV.pdf" class="btn" target="_blank" rel="noopener noreferrer" aria-label="Explore John Glover's professional experience (PDF)">
-                Explore my experience
-            </a>
-        </div>
-
-        <div class="socials">
-            <a href="mailto:j_glover1@sky.com">Email</a>
-            <span>•</span>
-            <a href="https://twitter.com/johnTheGlove" target="_blank" rel="noopener noreferrer">X (@johnTheGlove)</a>
-            <span>•</span>
-            <a href="https://instagram.com/johnTheGlove" target="_blank" rel="noopener noreferrer">Instagram (@johnTheGlove)</a>
-        </div>
-    </div>
-
-    <!-- Canvas Animation Script -->
     <script>
-        const canvas = document.getElementById('math-canvas');
-        const ctx = canvas.getContext('2d');
-
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        const textSymbols = [
-            '∑', '∫', '∂', 'σ', '∞', 'Δ', 'd/dt', 'λ', 'μ', 'θ', '∇',
-            'N(d1)', 'Δv', 'Isp', 'v_esc', 'F=ma', 'μ/r²', 'h_LEO',
-            'BUND 10Y', 'OAT 10Y', 'BTP 10Y', 'BONOS 10Y', 'GILTS 10Y',
-            '€STR', 'EURIBOR', 'ASW', 'EGB/SSA', 'N(0,1)', 'χ²'
-        ];
-
+        // Ambient mathematical notation in the background.
+        const bgCanvas = document.getElementById('math-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        const textSymbols = ['∑', '∫', '∂', 'σ', '∞', 'Δ', 'd/dt', 'λ', 'μ', 'θ', '∇', 'N(d1)', 'ASW', 'EGB/SSA', '€STR', 'χ²'];
         const particles = [];
 
-        class Particle {
-            constructor() {
-                this.reset();
-            }
+        function resizeBackground() {
+            const dpr = window.devicePixelRatio || 1;
+            bgCanvas.width = Math.round(window.innerWidth * dpr);
+            bgCanvas.height = Math.round(window.innerHeight * dpr);
+            bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        window.addEventListener('resize', resizeBackground);
+        resizeBackground();
 
+        class Particle {
+            constructor() { this.reset(); }
             reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
                 this.vx = (Math.random() - 0.5) * 0.4;
                 this.vy = (Math.random() - 0.5) * 0.4;
-
-                this.isGraph = Math.random() < 0.22;
                 this.text = textSymbols[Math.floor(Math.random() * textSymbols.length)];
                 this.size = Math.random() * 12 + 11;
-                this.opacity = Math.random() * 0.35 + 0.12;
-                this.graphWidth = Math.random() * 30 + 40;
-                this.graphHeight = this.graphWidth * 0.5;
+                this.opacity = Math.random() * 0.22 + 0.07;
             }
-
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-
-                if (this.x < -60) this.x = canvas.width + 50;
-                if (this.x > canvas.width + 60) this.x = -50;
-                if (this.y < -60) this.y = canvas.height + 50;
-                if (this.y > canvas.height + 60) this.y = -50;
+                if (this.x < -60) this.x = window.innerWidth + 50;
+                if (this.x > window.innerWidth + 60) this.x = -50;
+                if (this.y < -60) this.y = window.innerHeight + 50;
+                if (this.y > window.innerHeight + 60) this.y = -50;
             }
-
             draw() {
-                ctx.save();
-                ctx.strokeStyle = `rgba(88, 166, 255, ${this.opacity})`;
-                ctx.fillStyle = `rgba(88, 166, 255, ${this.opacity})`;
-
-                if (this.isGraph) {
-                    ctx.beginPath();
-                    const w = this.graphWidth;
-                    const h = this.graphHeight;
-                    const startX = this.x;
-                    const startY = this.y;
-
-                    ctx.moveTo(startX, startY);
-                    for (let px = 0; px <= w; px++) {
-                        const normX = (px / w - 0.5) * 6;
-                        const normY = Math.exp(-0.5 * normX * normX);
-                        ctx.lineTo(startX + px, startY - normY * h);
-                    }
-                    ctx.lineWidth = 1.5;
-                    ctx.stroke();
-
-                    ctx.beginPath();
-                    ctx.moveTo(startX, startY);
-                    ctx.lineTo(startX + w, startY);
-                    ctx.lineWidth = 0.5;
-                    ctx.stroke();
-                } else {
-                    ctx.font = `${this.size}px monospace`;
-                    ctx.fillText(this.text, this.x, this.y);
-                }
-                ctx.restore();
+                bgCtx.fillStyle = `rgba(88, 166, 255, ${this.opacity})`;
+                bgCtx.font = `${this.size}px monospace`;
+                bgCtx.fillText(this.text, this.x, this.y);
             }
         }
 
-        for (let i = 0; i < 52; i++) {
-            particles.push(new Particle());
-        }
+        for (let i = 0; i < 42; i++) particles.push(new Particle());
 
         function animateBackground() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            bgCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            particles.forEach(particle => { particle.update(); particle.draw(); });
             requestAnimationFrame(animateBackground);
         }
-
         animateBackground();
 
-        // The illustrative curve returns to its starting shape every 30 seconds.
+        // Synthetic yield observations and curve repeat smoothly on a 12-second loop.
         const yieldCanvas = document.getElementById('yield-canvas');
         const yieldCtx = yieldCanvas.getContext('2d');
-        const yieldPoints = [
-            { x: 0.08, residual: 0.72, cheap: true },
-            { x: 0.22, residual: -0.55, cheap: false },
-            { x: 0.38, residual: 0.48, cheap: true },
-            { x: 0.55, residual: -0.65, cheap: false },
-            { x: 0.73, residual: 0.62, cheap: true },
-            { x: 0.91, residual: -0.42, cheap: false }
+        const observations = [
+            { tenor: 2, residual: 0.055 },
+            { tenor: 5, residual: -0.035 },
+            { tenor: 7, residual: 0.028 },
+            { tenor: 10, residual: -0.052 },
+            { tenor: 15, residual: 0.043 },
+            { tenor: 20, residual: -0.026 },
+            { tenor: 30, residual: 0.038 }
         ];
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const cycleDuration = 30000;
-        let yieldStart;
+        const cycleDuration = 12000;
+        let cycleStart;
+        let lastWidth = 0;
+        let lastHeight = 0;
 
         function drawYieldCurve(timestamp) {
-            if (yieldStart === undefined) yieldStart = timestamp;
-            const elapsed = reducedMotion ? 0 : (timestamp - yieldStart) % cycleDuration;
-            const phase = (elapsed / cycleDuration) * Math.PI * 2;
+            if (cycleStart === undefined) cycleStart = timestamp;
+            const phase = reducedMotion ? 0 : ((timestamp - cycleStart) % cycleDuration) / cycleDuration * Math.PI * 2;
             const rect = yieldCanvas.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
             const width = rect.width;
             const height = rect.height;
 
-            yieldCanvas.width = Math.round(width * dpr);
-            yieldCanvas.height = Math.round(height * dpr);
+            if (width !== lastWidth || height !== lastHeight || yieldCanvas.width !== Math.round(width * dpr)) {
+                yieldCanvas.width = Math.round(width * dpr);
+                yieldCanvas.height = Math.round(height * dpr);
+                lastWidth = width;
+                lastHeight = height;
+            }
             yieldCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
             yieldCtx.clearRect(0, 0, width, height);
 
-            const left = 22;
-            const right = width - 8;
-            const top = 10;
-            const bottom = height - 19;
+            const left = 54;
+            const right = width - 18;
+            const top = 22;
+            const bottom = height - 34;
             const plotWidth = right - left;
             const plotHeight = bottom - top;
+            const minTenor = 0;
+            const maxTenor = 30;
+            const minYield = 2.0;
+            const maxYield = 4.5;
+            const xAt = tenor => left + (tenor - minTenor) / (maxTenor - minTenor) * plotWidth;
+            const yAt = yieldValue => bottom - (yieldValue - minYield) / (maxYield - minYield) * plotHeight;
 
-            // Subtle guides and axes.
-            yieldCtx.strokeStyle = 'rgba(139, 148, 158, 0.16)';
-            yieldCtx.lineWidth = 1;
-            yieldCtx.setLineDash([3, 4]);
-            for (let i = 1; i <= 3; i++) {
-                const y = top + (plotHeight * i) / 4;
+            // Low-amplitude, periodic level / slope / curvature changes; explicitly illustrative only.
+            const curveYield = tenor => {
+                const t = tenor / maxTenor;
+                const base = 2.35 + 1.55 * (1 - Math.exp(-tenor / 8.5)) - 0.22 * t;
+                const level = 0.075 * Math.sin(phase);
+                const slope = 0.10 * Math.sin(phase + 1.1) * (t - 0.42);
+                const curvature = 0.08 * Math.sin(phase * 2 - 0.6) * Math.sin(Math.PI * t);
+                return base + level + slope + curvature;
+            };
+
+            // Horizontal yield guides and left-side yield labels.
+            yieldCtx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+            yieldCtx.textAlign = 'right';
+            yieldCtx.textBaseline = 'middle';
+            for (let value = 2.0; value <= 4.5001; value += 0.5) {
+                const y = yAt(value);
                 yieldCtx.beginPath();
                 yieldCtx.moveTo(left, y);
                 yieldCtx.lineTo(right, y);
-                yieldCtx.stroke();
-            }
-            yieldCtx.setLineDash([]);
-            yieldCtx.strokeStyle = 'rgba(139, 148, 158, 0.4)';
-            yieldCtx.beginPath();
-            yieldCtx.moveTo(left, top);
-            yieldCtx.lineTo(left, bottom);
-            yieldCtx.lineTo(right, bottom);
-            yieldCtx.stroke();
-
-            const curveY = (x) => {
-                const t = x;
-                const base = 0.78 - 0.46 * t + 0.10 * Math.sin(Math.PI * t);
-                const evolution = 0.055 * Math.sin(phase) * (t - 0.42)
-                    + 0.035 * Math.sin(phase * 2) * Math.sin(Math.PI * t);
-                return top + (1 - (base + evolution)) * plotHeight;
-            };
-
-            // Yield curve line, drawn smoothly from left to right.
-            yieldCtx.beginPath();
-            for (let i = 0; i <= 100; i++) {
-                const x = i / 100;
-                const px = left + x * plotWidth;
-                const py = curveY(x);
-                if (i === 0) yieldCtx.moveTo(px, py);
-                else yieldCtx.lineTo(px, py);
-            }
-            yieldCtx.strokeStyle = '#58a6ff';
-            yieldCtx.lineWidth = 2;
-            yieldCtx.stroke();
-
-            // Bond observations sit above (higher yield / cheap) or below (lower yield / rich) the curve.
-            yieldPoints.forEach((point, index) => {
-                const x = left + point.x * plotWidth;
-                const curve = curveY(point.x);
-                const drift = Math.sin(phase + index * 1.15) * 2.2;
-                const y = curve - point.residual * 8 - drift;
-                const color = point.cheap ? '#f0883e' : '#3fb950';
-
-                yieldCtx.beginPath();
-                yieldCtx.moveTo(x, curve);
-                yieldCtx.lineTo(x, y);
-                yieldCtx.strokeStyle = `${color}99`;
+                yieldCtx.strokeStyle = 'rgba(139, 148, 158, 0.15)';
                 yieldCtx.lineWidth = 1;
                 yieldCtx.stroke();
+                yieldCtx.fillStyle = 'rgba(139, 148, 158, 0.78)';
+                yieldCtx.fillText(`${value.toFixed(1)}%`, left - 10, y);
+            }
 
+            // Tenor grid / labels.
+            const tenors = [2, 5, 10, 15, 20, 30];
+            yieldCtx.textAlign = 'center';
+            yieldCtx.textBaseline = 'top';
+            tenors.forEach(tenor => {
+                const x = xAt(tenor);
                 yieldCtx.beginPath();
-                yieldCtx.arc(x, y, 3.2, 0, Math.PI * 2);
-                yieldCtx.fillStyle = color;
-                yieldCtx.fill();
+                yieldCtx.moveTo(x, top);
+                yieldCtx.lineTo(x, bottom);
+                yieldCtx.strokeStyle = 'rgba(139, 148, 158, 0.09)';
+                yieldCtx.lineWidth = 1;
+                yieldCtx.stroke();
+                yieldCtx.fillStyle = 'rgba(139, 148, 158, 0.84)';
+                yieldCtx.fillText(`${tenor}Y`, x, bottom + 10);
             });
 
-            yieldCtx.fillStyle = 'rgba(139, 148, 158, 0.8)';
-            yieldCtx.font = '9px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-            yieldCtx.fillText('2Y', left - 2, height - 4);
-            yieldCtx.fillText('10Y', right - 12, height - 4);
+            // Fitted curve line.
+            yieldCtx.beginPath();
+            for (let i = 0; i <= 180; i++) {
+                const tenor = maxTenor * i / 180;
+                const x = xAt(tenor);
+                const y = yAt(curveYield(tenor));
+                if (i === 0) yieldCtx.moveTo(x, y);
+                else yieldCtx.lineTo(x, y);
+            }
+            yieldCtx.strokeStyle = '#58a6ff';
+            yieldCtx.lineWidth = 2.5;
+            yieldCtx.lineJoin = 'round';
+            yieldCtx.stroke();
+
+            // Bond points: positive yield residuals above the fitted curve are cheap; negative are rich.
+            observations.forEach((point, index) => {
+                const tenor = point.tenor;
+                const dynamicResidual = point.residual
+                    + 0.035 * Math.sin(phase + index * 0.9)
+                    + 0.012 * Math.sin(phase * 2 + index * 1.4);
+                const observedYield = curveYield(tenor) + dynamicResidual;
+                const x = xAt(tenor);
+                const curveY = yAt(curveYield(tenor));
+                const pointY = yAt(observedYield);
+                const cheap = dynamicResidual > 0;
+                const color = cheap ? '#f0883e' : '#3fb950';
+
+                yieldCtx.beginPath();
+                yieldCtx.moveTo(x, curveY);
+                yieldCtx.lineTo(x, pointY);
+                yieldCtx.strokeStyle = `${color}aa`;
+                yieldCtx.lineWidth = 1.5;
+                yieldCtx.stroke();
+
+                yieldCtx.beginPath();
+                yieldCtx.arc(x, pointY, 4.5, 0, Math.PI * 2);
+                yieldCtx.fillStyle = color;
+                yieldCtx.fill();
+                yieldCtx.lineWidth = 1.5;
+                yieldCtx.strokeStyle = '#0d1117';
+                yieldCtx.stroke();
+            });
 
             if (!reducedMotion) requestAnimationFrame(drawYieldCurve);
         }
-
         requestAnimationFrame(drawYieldCurve);
     </script>
 </body>
