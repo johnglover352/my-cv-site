@@ -80,7 +80,7 @@
         .yield-chart {
             width: 100%;
             padding: 22px 26px 18px;
-            background: linear-gradient(145deg, rgba(20, 27, 38, 0.94), rgba(13, 17, 23, 0.88));
+            background: linear-gradient(145deg, rgba(20, 27, 38, 0.96), rgba(13, 17, 23, 0.92));
             border: 1px solid rgba(139, 148, 158, 0.22);
             border-radius: 12px;
             box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28), inset 0 1px rgba(255,255,255,0.035);
@@ -115,11 +115,45 @@
             text-transform: uppercase;
         }
 
+        .chart-controls {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .control-label {
+            margin-right: 4px;
+            color: #8b949e;
+            font-size: 0.72rem;
+        }
+
+        .metric-button {
+            padding: 7px 12px;
+            border: 1px solid rgba(139, 148, 158, 0.26);
+            border-radius: 6px;
+            background: rgba(22, 27, 34, 0.8);
+            color: #c9d1d9;
+            font: inherit;
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+        }
+
+        .metric-button:hover { border-color: #58a6ff; color: #e6edf3; }
+        .metric-button[aria-pressed="true"] {
+            background: rgba(56, 139, 253, 0.16);
+            border-color: #388bfd;
+            color: #79c0ff;
+        }
+        .metric-button:focus-visible { outline: 2px solid #58a6ff; outline-offset: 2px; }
+
         #yield-canvas {
             display: block;
             width: 100%;
             height: 300px;
-            margin-top: 12px;
+            margin-top: 8px;
         }
 
         .chart-legend {
@@ -135,8 +169,8 @@
         .legend-item { display: inline-flex; align-items: center; gap: 7px; }
         .legend-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
         .legend-curve { background: #58a6ff; }
-        .legend-cheap { background: #f0883e; }
-        .legend-rich { background: #3fb950; }
+        .legend-buy { background: #3fb950; }
+        .legend-sell { background: #f85149; }
 
         .container {
             width: min(650px, 100%);
@@ -209,8 +243,10 @@
             .yield-chart { padding: 17px 14px 14px; }
             #yield-canvas { height: 240px; }
             .chart-badge { display: none; }
+            .chart-heading { gap: 8px; }
             .container { padding: 2rem 1.25rem; }
             h1 { font-size: 1.9rem; }
+            .chart-legend { gap: 12px; font-size: 0.67rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -226,15 +262,21 @@
             <div class="chart-heading">
                 <div>
                     <h2 class="chart-title" id="yield-title">Rates relative value · illustrative</h2>
-                    <p class="chart-subtitle">Indicative government bond yields and residuals to fitted curve</p>
+                    <p class="chart-subtitle" id="chart-subtitle">Government bond yield curve and residuals to fitted curve</p>
                 </div>
                 <span class="chart-badge">Synthetic data · not market quotes</span>
             </div>
-            <canvas id="yield-canvas" role="img" aria-label="Illustrative yield curve for 2, 5, 10, 15, 20 and 30 year bonds. Points above the fitted curve indicate relatively cheap bonds; points below indicate relatively rich bonds. Synthetic data, not market quotes."></canvas>
+            <div class="chart-controls" role="group" aria-label="Select relative value curve">
+                <span class="control-label">View:</span>
+                <button class="metric-button" type="button" data-metric="yield" aria-pressed="true">Yield</button>
+                <button class="metric-button" type="button" data-metric="asw" aria-pressed="false">€STR ASW spread</button>
+                <button class="metric-button" type="button" data-metric="zspread" aria-pressed="false">€STR Z-spread</button>
+            </div>
+            <canvas id="yield-canvas" role="img" aria-label="Illustrative yield curve. Green points indicate buy signals, and red points indicate sell signals. Synthetic data, not market quotes."></canvas>
             <div class="chart-legend" aria-hidden="true">
                 <span class="legend-item"><span class="legend-dot legend-curve"></span>Fitted curve</span>
-                <span class="legend-item"><span class="legend-dot legend-cheap"></span>Cheap · higher yield</span>
-                <span class="legend-item"><span class="legend-dot legend-rich"></span>Rich · lower yield</span>
+                <span class="legend-item"><span class="legend-dot legend-buy"></span>Buy · cheap versus curve</span>
+                <span class="legend-item"><span class="legend-dot legend-sell"></span>Sell · rich versus curve</span>
             </div>
         </section>
 
@@ -310,9 +352,10 @@
         }
         animateBackground();
 
-        // Synthetic yield observations and curve repeat smoothly on a 12-second loop.
+        // Synthetic illustrative curves; values are invented, not live market data.
         const yieldCanvas = document.getElementById('yield-canvas');
         const yieldCtx = yieldCanvas.getContext('2d');
+        const subtitle = document.getElementById('chart-subtitle');
         const observations = [
             { tenor: 2, residual: 0.055 },
             { tenor: 5, residual: -0.035 },
@@ -322,11 +365,54 @@
             { tenor: 20, residual: -0.026 },
             { tenor: 30, residual: 0.038 }
         ];
+        const curveConfigs = {
+            yield: {
+                label: 'Yield', unit: '%', min: 2.0, max: 4.5, step: 0.5,
+                subtitle: 'Government bond yield curve and residuals to fitted curve',
+                base: tenor => 2.35 + 1.55 * (1 - Math.exp(-tenor / 8.5)) - 0.22 * tenor / 30,
+                residualScale: 1,
+                levelMove: 0.075,
+                slopeMove: 0.10,
+                curvatureMove: 0.08,
+                decimals: 2
+            },
+            asw: {
+                label: '€STR ASW spread', unit: 'bp', min: 20, max: 80, step: 10,
+                subtitle: 'Illustrative €STR asset-swap spread curve and relative-value residuals',
+                base: tenor => 29 + 35 * (1 - Math.exp(-tenor / 11)) + 3 * tenor / 30,
+                residualScale: 100,
+                levelMove: 3.2,
+                slopeMove: 4.0,
+                curvatureMove: 3.0,
+                decimals: 1
+            },
+            zspread: {
+                label: '€STR Z-spread', unit: 'bp', min: 30, max: 100, step: 10,
+                subtitle: 'Illustrative €STR Z-spread curve and relative-value residuals',
+                base: tenor => 40 + 43 * (1 - Math.exp(-tenor / 12)) + 5 * tenor / 30,
+                residualScale: 100,
+                levelMove: 3.8,
+                slopeMove: 4.5,
+                curvatureMove: 3.5,
+                decimals: 1
+            }
+        };
+        let selectedMetric = 'yield';
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const cycleDuration = 12000;
         let cycleStart;
         let lastWidth = 0;
         let lastHeight = 0;
+
+        document.querySelectorAll('.metric-button').forEach(button => {
+            button.addEventListener('click', () => {
+                selectedMetric = button.dataset.metric;
+                document.querySelectorAll('.metric-button').forEach(option => {
+                    option.setAttribute('aria-pressed', String(option === button));
+                });
+                subtitle.textContent = curveConfigs[selectedMetric].subtitle;
+            });
+        });
 
         function drawYieldCurve(timestamp) {
             if (cycleStart === undefined) cycleStart = timestamp;
@@ -345,34 +431,29 @@
             yieldCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
             yieldCtx.clearRect(0, 0, width, height);
 
-            const left = 54;
+            const config = curveConfigs[selectedMetric];
+            const left = 60;
             const right = width - 18;
             const top = 22;
             const bottom = height - 34;
             const plotWidth = right - left;
             const plotHeight = bottom - top;
-            const minTenor = 0;
-            const maxTenor = 30;
-            const minYield = 2.0;
-            const maxYield = 4.5;
-            const xAt = tenor => left + (tenor - minTenor) / (maxTenor - minTenor) * plotWidth;
-            const yAt = yieldValue => bottom - (yieldValue - minYield) / (maxYield - minYield) * plotHeight;
+            const xAt = tenor => left + tenor / 30 * plotWidth;
+            const yAt = value => bottom - (value - config.min) / (config.max - config.min) * plotHeight;
 
-            // Low-amplitude, periodic level / slope / curvature changes; explicitly illustrative only.
-            const curveYield = tenor => {
-                const t = tenor / maxTenor;
-                const base = 2.35 + 1.55 * (1 - Math.exp(-tenor / 8.5)) - 0.22 * t;
-                const level = 0.075 * Math.sin(phase);
-                const slope = 0.10 * Math.sin(phase + 1.1) * (t - 0.42);
-                const curvature = 0.08 * Math.sin(phase * 2 - 0.6) * Math.sin(Math.PI * t);
-                return base + level + slope + curvature;
+            const curveValue = tenor => {
+                const t = tenor / 30;
+                return config.base(tenor)
+                    + config.levelMove * Math.sin(phase)
+                    + config.slopeMove * Math.sin(phase + 1.1) * (t - 0.42)
+                    + config.curvatureMove * Math.sin(phase * 2 - 0.6) * Math.sin(Math.PI * t);
             };
 
-            // Horizontal yield guides and left-side yield labels.
+            // Horizontal value guides and axis labels.
             yieldCtx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
             yieldCtx.textAlign = 'right';
             yieldCtx.textBaseline = 'middle';
-            for (let value = 2.0; value <= 4.5001; value += 0.5) {
+            for (let value = config.min; value <= config.max + config.step * 0.001; value += config.step) {
                 const y = yAt(value);
                 yieldCtx.beginPath();
                 yieldCtx.moveTo(left, y);
@@ -381,14 +462,11 @@
                 yieldCtx.lineWidth = 1;
                 yieldCtx.stroke();
                 yieldCtx.fillStyle = 'rgba(139, 148, 158, 0.78)';
-                yieldCtx.fillText(`${value.toFixed(1)}%`, left - 10, y);
+                yieldCtx.fillText(`${value.toFixed(config.decimals)}${config.unit === '%' ? '%' : ''}`, left - 10, y);
             }
 
             // Tenor grid / labels.
-            const tenors = [2, 5, 10, 15, 20, 30];
-            yieldCtx.textAlign = 'center';
-            yieldCtx.textBaseline = 'top';
-            tenors.forEach(tenor => {
+            [2, 5, 10, 15, 20, 30].forEach(tenor => {
                 const x = xAt(tenor);
                 yieldCtx.beginPath();
                 yieldCtx.moveTo(x, top);
@@ -397,15 +475,17 @@
                 yieldCtx.lineWidth = 1;
                 yieldCtx.stroke();
                 yieldCtx.fillStyle = 'rgba(139, 148, 158, 0.84)';
+                yieldCtx.textAlign = 'center';
+                yieldCtx.textBaseline = 'top';
                 yieldCtx.fillText(`${tenor}Y`, x, bottom + 10);
             });
 
-            // Fitted curve line.
+            // Fitted curve.
             yieldCtx.beginPath();
             for (let i = 0; i <= 180; i++) {
-                const tenor = maxTenor * i / 180;
+                const tenor = 30 * i / 180;
                 const x = xAt(tenor);
-                const y = yAt(curveYield(tenor));
+                const y = yAt(curveValue(tenor));
                 if (i === 0) yieldCtx.moveTo(x, y);
                 else yieldCtx.lineTo(x, y);
             }
@@ -414,28 +494,28 @@
             yieldCtx.lineJoin = 'round';
             yieldCtx.stroke();
 
-            // Bond points: positive yield residuals above the fitted curve are cheap; negative are rich.
+            // For yields, a higher yield than fitted is cheap/buy; for spreads, wider is cheap/buy.
             observations.forEach((point, index) => {
-                const tenor = point.tenor;
-                const dynamicResidual = point.residual
-                    + 0.035 * Math.sin(phase + index * 0.9)
-                    + 0.012 * Math.sin(phase * 2 + index * 1.4);
-                const observedYield = curveYield(tenor) + dynamicResidual;
-                const x = xAt(tenor);
-                const curveY = yAt(curveYield(tenor));
-                const pointY = yAt(observedYield);
-                const cheap = dynamicResidual > 0;
-                const color = cheap ? '#f0883e' : '#3fb950';
+                const residual = point.residual * config.residualScale
+                    + config.residualScale * 0.035 * Math.sin(phase + index * 0.9)
+                    + config.residualScale * 0.012 * Math.sin(phase * 2 + index * 1.4);
+                const fitted = curveValue(point.tenor);
+                const observed = fitted + residual;
+                const x = xAt(point.tenor);
+                const fittedY = yAt(fitted);
+                const pointY = yAt(observed);
+                const isBuy = residual > 0;
+                const color = isBuy ? '#3fb950' : '#f85149';
 
                 yieldCtx.beginPath();
-                yieldCtx.moveTo(x, curveY);
+                yieldCtx.moveTo(x, fittedY);
                 yieldCtx.lineTo(x, pointY);
-                yieldCtx.strokeStyle = `${color}aa`;
+                yieldCtx.strokeStyle = `${color}bb`;
                 yieldCtx.lineWidth = 1.5;
                 yieldCtx.stroke();
 
                 yieldCtx.beginPath();
-                yieldCtx.arc(x, pointY, 4.5, 0, Math.PI * 2);
+                yieldCtx.arc(x, pointY, 4.8, 0, Math.PI * 2);
                 yieldCtx.fillStyle = color;
                 yieldCtx.fill();
                 yieldCtx.lineWidth = 1.5;
@@ -443,6 +523,7 @@
                 yieldCtx.stroke();
             });
 
+            yieldCanvas.setAttribute('aria-label', `Illustrative ${config.label} curve. Green points are buy signals where values are above the fitted curve; red points are sell signals where values are below. Synthetic data, not market quotes.`);
             if (!reducedMotion) requestAnimationFrame(drawYieldCurve);
         }
         requestAnimationFrame(drawYieldCurve);
