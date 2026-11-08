@@ -37,139 +37,125 @@
   </script>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 32px; background: #0d1117; color: #e6edf3; position: relative; overflow-x: hidden; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 32px; background: #0d1117; color: #e6edf3; position: relative; overflow-x: hidden; }
     #math-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-    .page-content { width: min(1120px, 100%); display: flex; flex-direction: column; align-items: center; gap: 24px; z-index: 1; }
-    .chart-panel, .growth-panel { width: 100%; padding: 22px 26px 18px; background: linear-gradient(145deg, rgba(20,27,38,.97), rgba(13,17,23,.95)); border: 1px solid rgba(139,148,158,.25); border-radius: 12px; box-shadow: 0 18px 42px rgba(0,0,0,.3); }
-    .chart-heading, .growth-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
-    .chart-title { margin: 0; color: #e6edf3; font-size: .9rem; font-weight: 600; letter-spacing: .04em; }
-    .chart-subtitle { margin: 5px 0 0; color: #a4acb7; font-size: .76rem; }
-    .chart-badge { flex: 0 0 auto; color: #8b949e; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
-    .chart-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
-    .control-label { margin-right: 4px; color: #8b949e; font-size: .72rem; }
-    .metric-button, .motion-button, .growth-button { padding: 7px 12px; border: 1px solid rgba(139,148,158,.3); border-radius: 6px; background: rgba(22,27,34,.9); color: #c9d1d9; font: inherit; font-size: .72rem; cursor: pointer; }
-    .metric-button:hover, .motion-button:hover, .growth-button:hover { border-color: #58a6ff; color: #e6edf3; }
+    .page-content { width: min(1120px, 100%); display: flex; flex-direction: column; align-items: center; gap: 24px; z-index: 1; margin: auto; }
+    .panel { width: 100%; padding: 22px 26px 18px; background: linear-gradient(145deg, rgba(20,27,38,.97), rgba(13,17,23,.95)); border: 1px solid rgba(139,148,158,.25); border-radius: 12px; box-shadow: 0 18px 42px rgba(0,0,0,.3); }
+    .heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .panel-title { margin: 0; color: #e6edf3; font-size: .9rem; font-weight: 600; letter-spacing: .04em; }
+    .panel-subtitle { margin: 5px 0 0; color: #a4acb7; font-size: .76rem; }
+    .badge { flex: 0 0 auto; color: #8b949e; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
+    .controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .control-label { color: #8b949e; font-size: .72rem; }
+    .metric-button, .action-button { padding: 7px 12px; border: 1px solid rgba(139,148,158,.3); border-radius: 6px; background: rgba(22,27,34,.9); color: #c9d1d9; font: inherit; font-size: .72rem; cursor: pointer; }
+    .metric-button:hover, .action-button:hover { border-color: #58a6ff; color: #e6edf3; }
     .metric-button[aria-pressed="true"] { background: rgba(56,139,253,.18); border-color: #388bfd; color: #79c0ff; }
-    button:focus-visible { outline: 2px solid #58a6ff; outline-offset: 2px; }
-    .motion-status { margin-left: auto; color: #3fb950; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; }
-    .motion-status::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
-    #yield-canvas { display: block; width: 100%; height: 320px; margin-top: 8px; }
-    .chart-legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 22px; padding-top: 4px; color: #a4acb7; font-size: .72rem; }
+    button:focus-visible, a:focus-visible { outline: 2px solid #58a6ff; outline-offset: 2px; }
+    .status { margin-left: auto; color: #3fb950; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; }
+    .status::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+    canvas.chart { display: block; width: 100%; height: 320px; margin-top: 8px; }
+    .legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 22px; padding-top: 4px; color: #a4acb7; font-size: .72rem; }
     .legend-item { display: inline-flex; align-items: center; gap: 7px; }
-    .legend-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-    .legend-curve { background: #58a6ff; } .legend-buy { background: #3fb950; } .legend-sell { background: #f85149; }
-    .growth-header { align-items: center; }
-    .growth-stats { display: flex; align-items: center; gap: 18px; color: #a4acb7; font-size: .75rem; }
-    .growth-stats strong { color: #e6edf3; font-variant-numeric: tabular-nums; }
-    .growth-stat-label { color: #8b949e; margin-right: 5px; }
-    #growth-canvas { display: block; width: 100%; height: 250px; margin-top: 14px; border: 1px solid rgba(139,148,158,.14); border-radius: 8px; background: rgba(1,4,9,.35); }
-    .growth-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px; color: #8b949e; font-size: .72rem; }
-    .growth-key { color: #d2a8ff; }
-    .container { width: min(650px,100%); text-align: center; padding: 2.5rem; background: rgba(13,17,23,.92); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,.5); }
-    h1 { margin: 0 0 .25rem; font-size: 2.3rem; font-weight: 700; letter-spacing: -.5px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    .curve-dot { background: #58a6ff; } .buy-dot { background: #3fb950; } .sell-dot { background: #f85149; }
+    #space-canvas { display: block; width: 100%; height: 350px; margin-top: 14px; border: 1px solid rgba(139,148,158,.14); border-radius: 8px; background: radial-gradient(ellipse at 50% 50%, rgba(19,31,51,.7), rgba(1,4,9,.72)); }
+    .space-footer { display: flex; justify-content: space-between; gap: 14px; margin-top: 10px; color: #8b949e; font-size: .72rem; }
+    .space-key { color: #79c0ff; }
+    .profile { width: min(650px,100%); text-align: center; padding: 2.5rem; background: rgba(13,17,23,.92); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,.5); }
+    h1 { margin: 0 0 .25rem; font-size: 2.3rem; letter-spacing: -.5px; }
     .subtitle { font-size: 1.05rem; color: #58a6ff; margin: 0 0 1.25rem; font-weight: 500; }
     .bio { color: #a4acb7; font-size: .95rem; line-height: 1.6; margin: 0 0 1.5rem; }
-    .btn { display: inline-block; padding: 12px 26px; background: #21262d; border: 1px solid rgba(255,255,255,.15); color: #c9d1d9; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: .9rem; }
-    .btn:hover, .btn:focus-visible { background: #30363d; border-color: #58a6ff; }
+    .btn { display: inline-block; padding: 12px 26px; border: 1px solid rgba(255,255,255,.12); border-radius: 6px; background: #21262d; color: #c9d1d9; font: 500 .9rem inherit; }
+    .btn-disabled { opacity: .58; cursor: not-allowed; }
     .socials { margin-top: 2rem; font-size: .9rem; color: #8b949e; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
     .socials a { color: #58a6ff; text-decoration: none; margin: 0 4px; }
     .socials a:hover { color: #79c0ff; text-decoration: underline; }
-    @media (max-width: 700px) { body { padding: 18px 14px; } .page-content { gap: 18px; } .chart-panel, .growth-panel { padding: 17px 14px 14px; } #yield-canvas { height: 260px; } #growth-canvas { height: 220px; } .chart-badge { display: none; } .container { padding: 2rem 1.25rem; } h1 { font-size: 1.9rem; } .chart-legend { gap: 12px; font-size: .67rem; } .growth-header { align-items: flex-start; flex-direction: column; } .growth-stats { gap: 12px; flex-wrap: wrap; } .growth-footer { align-items: flex-start; flex-direction: column; } .motion-status { margin-left: 0; } }
+    @media (max-width: 700px) { body { padding: 18px 14px; } .page-content { gap: 18px; } .panel { padding: 17px 14px 14px; } canvas.chart { height: 260px; } #space-canvas { height: 290px; } .badge { display: none; } .profile { padding: 2rem 1.25rem; } h1 { font-size: 1.9rem; } .legend { gap: 12px; font-size: .67rem; } .space-footer { flex-direction: column; } .status { margin-left: 0; } }
   </style>
 </head>
 <body>
   <canvas id="math-canvas" aria-hidden="true"></canvas>
   <main class="page-content">
-    <section class="chart-panel" aria-labelledby="yield-title">
-      <div class="chart-heading"><div><h2 class="chart-title" id="yield-title">Rates relative value · illustrative</h2><p class="chart-subtitle" id="chart-subtitle">Yield curve · rising and flattening</p></div><span class="chart-badge">Synthetic data · not market quotes</span></div>
-      <div class="chart-controls" role="group" aria-label="Select relative value curve">
-        <span class="control-label">View:</span>
-        <button class="metric-button" type="button" data-metric="yield" aria-pressed="true">Yield</button>
-        <button class="metric-button" type="button" data-metric="asw" aria-pressed="false">€STR ASW spread</button>
-        <button class="metric-button" type="button" data-metric="zspread" aria-pressed="false">€STR Z-spread</button>
-        <button class="motion-button" id="motion-toggle" type="button">Pause animation</button>
-        <span class="motion-status" id="motion-status" aria-live="polite">Animation running · 6s cycle</span>
-      </div>
-      <canvas id="yield-canvas" role="img" aria-label="Animated illustrative government bond yield curve. Green points indicate buy signals; red points indicate sell signals. Synthetic data, not market quotes."></canvas>
-      <div class="chart-legend" aria-hidden="true"><span class="legend-item"><span class="legend-dot legend-curve"></span>Fitted curve</span><span class="legend-item"><span class="legend-dot legend-buy"></span>Buy · cheap / wider</span><span class="legend-item"><span class="legend-dot legend-sell"></span>Sell · rich / tighter</span></div>
+    <section class="panel" aria-labelledby="yield-title">
+      <div class="heading"><div><h2 class="panel-title" id="yield-title">Rates relative value · illustrative</h2><p class="panel-subtitle" id="chart-subtitle">Yield curve · rising and flattening</p></div><span class="badge">Synthetic data · not market quotes</span></div>
+      <div class="controls" role="group" aria-label="Select relative value curve"><span class="control-label">View:</span><button class="metric-button" type="button" data-metric="yield" aria-pressed="true">Yield</button><button class="metric-button" type="button" data-metric="asw" aria-pressed="false">€STR ASW spread</button><button class="metric-button" type="button" data-metric="zspread" aria-pressed="false">€STR Z-spread</button><button class="action-button" id="curve-toggle" type="button">Pause animation</button><span class="status" id="curve-status" aria-live="polite">Animation running · 6s cycle</span></div>
+      <canvas class="chart" id="yield-canvas" role="img" aria-label="Animated illustrative government bond yield curve. Synthetic data, not market quotes."></canvas>
+      <div class="legend" aria-hidden="true"><span class="legend-item"><span class="dot curve-dot"></span>Fitted curve</span><span class="legend-item"><span class="dot buy-dot"></span>Buy · cheap / wider</span><span class="legend-item"><span class="dot sell-dot"></span>Sell · rich / tighter</span></div>
     </section>
-    <section class="growth-panel" aria-labelledby="growth-title">
-      <div class="growth-header">
-        <div><h2 class="chart-title" id="growth-title">Exponential growth · particle model</h2><p class="chart-subtitle">The population doubles periodically; collisions remove pairs. An illustrative, bounded simulation.</p></div>
-        <div class="growth-stats" aria-live="polite"><span><span class="growth-stat-label">Balls</span><strong id="ball-count">6</strong></span><span><span class="growth-stat-label">Doublings</span><strong id="doubling-count">0</strong></span></div>
-      </div>
-      <canvas id="growth-canvas" role="img" aria-label="Animated simulation of balls bouncing, colliding and disappearing in pairs while the population doubles every few seconds."></canvas>
-      <div class="growth-footer"><span><span class="growth-key">●</span> Each pulse duplicates every surviving ball; collisions eliminate pairs.</span><div><span id="growth-status" aria-live="polite">Simulation running</span> &nbsp; <button class="growth-button" id="growth-toggle" type="button">Pause balls</button> <button class="growth-button" id="growth-reset" type="button">Restart simulation</button></div></div>
+
+    <section class="panel" aria-labelledby="space-title">
+      <div class="heading"><div><h2 class="panel-title" id="space-title">Earth–Moon mission · illustrative</h2><p class="panel-subtitle">A spacecraft departs Earth orbit, transfers to the Moon, is captured, then returns · not to scale</p></div><span class="badge">Apollo / Artemis-inspired mission concept</span></div>
+      <canvas id="space-canvas" role="img" aria-label="Animated illustration of the Moon orbiting Earth while a spacecraft travels from Earth orbit to lunar orbit and back in a repeating loop."></canvas>
+      <div class="space-footer"><span><span class="space-key">●</span> Blue dashed line: Moon's orbit · Gold line: spacecraft transfer trajectory</span><span>Earth departure → lunar capture → return</span></div>
     </section>
-    <section class="container" aria-label="Profile">
-      <h1>John Glover, Ph.D.</h1>
-      <p class="subtitle">Director, Algo eRisk Quant Trader | European Rates &amp; SSA Specialist</p>
+
+    <section class="profile" aria-label="Profile">
+      <h1>John Glover, Ph.D.</h1><p class="subtitle">Director, Algo eRisk Quant Trader | European Rates &amp; SSA Specialist</p>
       <p class="bio">Specializing in relative value, automated flow-hedging, and electronic risk management across European government bonds (EGB) and SSA spread markets.</p>
-      <div><a href="johnGlover_ratesQuant_CV.pdf" class="btn" target="_blank" rel="noopener noreferrer" aria-label="Explore John Glover's professional experience (PDF)">Explore my experience</a></div>
-      <div class="socials">
-        <a href="mailto:j_glover1@sky.com">Email</a><span>•</span>
-        <a href="https://twitter.com/johnTheGlove" target="_blank" rel="noopener noreferrer">X (@johnTheGlove)</a><span>•</span>
-        <a href="https://instagram.com/johnTheGlove" target="_blank" rel="noopener noreferrer">Instagram (@johnTheGlove)</a><span>•</span>
-        <a href="https://members.onepeloton.com/members/johnTheGlove" target="_blank" rel="noopener noreferrer">Peloton</a>
-      </div>
+      <button class="btn btn-disabled" type="button" disabled aria-disabled="true">Under development</button>
+      <div class="socials"><a href="mailto:j_glover1@sky.com">Email</a><span>•</span><a href="https://twitter.com/johnTheGlove" target="_blank" rel="noopener noreferrer">X (@johnTheGlove)</a><span>•</span><a href="https://instagram.com/johnTheGlove" target="_blank" rel="noopener noreferrer">Instagram (@johnTheGlove)</a><span>•</span><a href="https://members.onepeloton.com/members/johnTheGlove" target="_blank" rel="noopener noreferrer">Peloton</a></div>
     </section>
   </main>
   <script>
-    // Low-key ambient mathematical notation.
-    const bgCanvas = document.getElementById('math-canvas'), bgCtx = bgCanvas.getContext('2d');
+    // Quiet ambient mathematical notation.
+    const bg = document.getElementById('math-canvas'), bgx = bg.getContext('2d');
     const symbols = ['∑','∫','∂','σ','∞','Δ','d/dt','λ','μ','θ','∇','N(d1)','ASW','EGB/SSA','€STR','χ²'];
-    const particles = [];
-    function resizeBackground() { const dpr=devicePixelRatio||1; bgCanvas.width=Math.round(innerWidth*dpr); bgCanvas.height=Math.round(innerHeight*dpr); bgCtx.setTransform(dpr,0,0,dpr,0,0); }
-    addEventListener('resize',resizeBackground); resizeBackground();
-    class Particle {
-      constructor() { this.x=Math.random()*innerWidth; this.y=Math.random()*innerHeight; this.vx=(Math.random()-.5)*.4; this.vy=(Math.random()-.5)*.4; this.text=symbols[Math.floor(Math.random()*symbols.length)]; this.size=Math.random()*12+11; this.opacity=Math.random()*.18+.05; }
-      update() { this.x+=this.vx; this.y+=this.vy; if(this.x< -60)this.x=innerWidth+50; if(this.x>innerWidth+60)this.x= -50; if(this.y< -60)this.y=innerHeight+50; if(this.y>innerHeight+60)this.y= -50; }
-      draw() { bgCtx.fillStyle=`rgba(88,166,255,${this.opacity})`; bgCtx.font=`${this.size}px monospace`; bgCtx.fillText(this.text,this.x,this.y); }
-    }
-    for(let i=0;i<36;i++)particles.push(new Particle());
-    function animateBackground(){bgCtx.clearRect(0,0,innerWidth,innerHeight);particles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animateBackground);}
-    animateBackground();
+    function resizeBg() { const d = devicePixelRatio || 1; bg.width = Math.round(innerWidth*d); bg.height = Math.round(innerHeight*d); bgx.setTransform(d,0,0,d,0,0); }
+    addEventListener('resize', resizeBg); resizeBg();
+    const ambient = Array.from({length:32}, () => ({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,s:symbols[Math.random()*symbols.length|0],a:.04+Math.random()*.1,z:12+Math.random()*10}));
+    function drawBg() { bgx.clearRect(0,0,innerWidth,innerHeight); ambient.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x< -40)p.x=innerWidth+30;if(p.x>innerWidth+40)p.x=-30;if(p.y< -40)p.y=innerHeight+30;if(p.y>innerHeight+40)p.y=-30;bgx.fillStyle=`rgba(88,166,255,${p.a})`;bgx.font=`${p.z}px monospace`;bgx.fillText(p.s,p.x,p.y);}); requestAnimationFrame(drawBg); }
+    drawBg();
 
-    // Distinct synthetic curves, animated on a six-second cycle.
-    const chart=document.getElementById('yield-canvas'),ctx=chart.getContext('2d');
-    const subtitle=document.getElementById('chart-subtitle'),motionStatus=document.getElementById('motion-status'),motionToggle=document.getElementById('motion-toggle');
-    const tenors=[2,5,7,10,15,20,30];
-    const curves={
-      yield:{label:'Yield',unit:'%',min:2,max:4.5,step:.5,decimals:1,color:'#58a6ff',subtitle:'Yield curve · upward sloping, then flattening',residuals:[.055,-.035,.028,-.052,.043,-.026,.038],value(t,p){const x=t/30;return 2.2+1.85*(1-Math.exp(-t/8.5))-.2*x+.28*Math.sin(p)*x+.16*Math.sin(p)*Math.sin(Math.PI*x);}},
-      asw:{label:'€STR ASW spread',unit:'bp',min:10,max:85,step:15,decimals:0,color:'#d2a8ff',subtitle:'ASW spread · distinct belly hump centred near 10Y',residuals:[5,-4.5,3.2,-6,4.8,-3.4,5.5],value(t,p){const center=10+2.5*Math.sin(p);return 21+51*Math.exp(-Math.pow((t-center)/7.5,2))-.12*t+4*Math.sin(p)*t/30;}},
-      zspread:{label:'€STR Z-spread',unit:'bp',min:55,max:135,step:20,decimals:0,color:'#f0883e',subtitle:'Z-spread · falls into the belly, then rebounds sharply long-end',residuals:[-7,5.5,-4.2,7.5,-6,4.6,-5.2],value(t,p){const x=t/30;return 119-4.1*t+.14*t*t+7*Math.sin(p)*(1-x)+5*Math.sin(p)*x;}}
+    // Metric-specific synthetic term structures and animated evolution.
+    const chart = document.getElementById('yield-canvas'), cx = chart.getContext('2d');
+    const chartSubtitle = document.getElementById('chart-subtitle'), curveToggle = document.getElementById('curve-toggle'), curveStatus = document.getElementById('curve-status');
+    const tenors = [2,5,7,10,15,20,30], configs = {
+      yield:{label:'Yield',unit:'%',min:2,max:4.5,step:.5,d:1,color:'#58a6ff',subtitle:'Yield curve · rising and flattening',res:[.055,-.035,.028,-.052,.043,-.026,.038],f(t,p){const x=t/30;return 2.2+1.85*(1-Math.exp(-t/8.5))-.2*x+.28*Math.sin(p)*x+.16*Math.sin(p)*Math.sin(Math.PI*x);}},
+      asw:{label:'€STR ASW spread',unit:'bp',min:10,max:85,step:15,d:0,color:'#d2a8ff',subtitle:'ASW spread · pronounced belly hump near 10Y',res:[5,-4.5,3.2,-6,4.8,-3.4,5.5],f(t,p){const center=10+2.5*Math.sin(p);return 21+51*Math.exp(-Math.pow((t-center)/7.5,2))-.12*t+4*Math.sin(p)*t/30;}},
+      zspread:{label:'€STR Z-spread',unit:'bp',min:55,max:135,step:20,d:0,color:'#f0883e',subtitle:'Z-spread · falls through the belly, then rebounds long-end',res:[-7,5.5,-4.2,7.5,-6,4.6,-5.2],f(t,p){const x=t/30;return 119-4.1*t+.14*t*t+7*Math.sin(p)*(1-x)+5*Math.sin(p)*x;}}
     };
-    let metric='yield',chartPaused=false,elapsed=0,lastChartFrame=null,chartWidth=0,chartHeight=0;
-    const chartLoop=6000,reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
-    if(reduceMotion.matches){chartPaused=true;motionToggle.textContent='Play animation';motionStatus.textContent='Animation paused · reduced motion';}
-    document.querySelectorAll('.metric-button').forEach(button=>button.addEventListener('click',()=>{metric=button.dataset.metric;document.querySelectorAll('.metric-button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));subtitle.textContent=curves[metric].subtitle;}));
-    motionToggle.addEventListener('click',()=>{chartPaused=!chartPaused;motionToggle.textContent=chartPaused?'Play animation':'Pause animation';motionStatus.textContent=chartPaused?'Animation paused':'Animation running · 6s cycle';lastChartFrame=null;});
-    function drawChart(now){if(lastChartFrame===null)lastChartFrame=now;if(!chartPaused)elapsed+=now-lastChartFrame;lastChartFrame=now;const phase=(elapsed%chartLoop)/chartLoop*Math.PI*2;const rect=chart.getBoundingClientRect(),w=rect.width,h=rect.height,dpr=devicePixelRatio||1;if(w>0&&h>0){if(w!==chartWidth||h!==chartHeight){chart.width=Math.round(w*dpr);chart.height=Math.round(h*dpr);chartWidth=w;chartHeight=h;}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);const c=curves[metric],left=66,right=w-18,top=22,bottom=h-34,xAt=t=>left+t/30*(right-left),yAt=v=>bottom-(v-c.min)/(c.max-c.min)*(bottom-top),curve=t=>c.value(t,phase);ctx.font='11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';for(let v=c.min;v<=c.max+c.step*.001;v+=c.step){const y=yAt(v);ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(right,y);ctx.strokeStyle='rgba(139,148,158,.18)';ctx.stroke();ctx.fillStyle='rgba(180,188,198,.9)';ctx.fillText(`${v.toFixed(c.decimals)}${c.unit==='%'?'%':' bp'}`,left-9,y);} [2,5,10,15,20,30].forEach(t=>{const x=xAt(t);ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,bottom);ctx.strokeStyle='rgba(139,148,158,.1)';ctx.stroke();ctx.fillStyle='rgba(180,188,198,.9)';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(`${t}Y`,x,bottom+10);});ctx.beginPath();for(let i=0;i<=240;i++){const t=30*i/240;if(i===0)ctx.moveTo(xAt(t),yAt(curve(t)));else ctx.lineTo(xAt(t),yAt(curve(t)));}ctx.strokeStyle=c.color;ctx.lineWidth=4;ctx.lineJoin='round';ctx.shadowColor=c.color;ctx.shadowBlur=12;ctx.stroke();ctx.shadowBlur=0;const mt=((phase/(2*Math.PI))*30+30)%30;ctx.beginPath();ctx.arc(xAt(mt),yAt(curve(mt)),7,0,2*Math.PI);ctx.fillStyle='#f0f6fc';ctx.fill();ctx.lineWidth=3;ctx.strokeStyle=c.color;ctx.stroke();c.residuals.forEach((base,i)=>{const t=tenors[i],res=base+(c.unit==='%'?.055:7)*Math.sin(phase+i*.9),fy=yAt(curve(t)),oy=yAt(curve(t)+res),x=xAt(t),color=res>0?'#3fb950':'#f85149';ctx.beginPath();ctx.moveTo(x,fy);ctx.lineTo(x,oy);ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();ctx.beginPath();ctx.arc(x,oy,5.5,0,2*Math.PI);ctx.fillStyle=color;ctx.fill();});}requestAnimationFrame(drawChart);}
+    let metric='yield', curvePaused=matchMedia('(prefers-reduced-motion: reduce)').matches, curveElapsed=0, chartPrev=null, chartW=0, chartH=0;
+    if(curvePaused){curveToggle.textContent='Play animation';curveStatus.textContent='Animation paused · reduced motion';}
+    document.querySelectorAll('.metric-button').forEach(b=>b.addEventListener('click',()=>{metric=b.dataset.metric;document.querySelectorAll('.metric-button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));chartSubtitle.textContent=configs[metric].subtitle;}));
+    curveToggle.addEventListener('click',()=>{curvePaused=!curvePaused;curveToggle.textContent=curvePaused?'Play animation':'Pause animation';curveStatus.textContent=curvePaused?'Animation paused':'Animation running · 6s cycle';chartPrev=null;});
+    function drawChart(now){if(chartPrev===null)chartPrev=now;if(!curvePaused)curveElapsed+=now-chartPrev;chartPrev=now;const phase=(curveElapsed%6000)/6000*Math.PI*2,r=chart.getBoundingClientRect(),w=r.width,h=r.height,d=devicePixelRatio||1;if(w>0&&h>0){if(w!==chartW||h!==chartH){chart.width=Math.round(w*d);chart.height=Math.round(h*d);chartW=w;chartH=h;}cx.setTransform(d,0,0,d,0,0);cx.clearRect(0,0,w,h);const c=configs[metric],l=66,rr=w-18,t=22,bt=h-34,xAt=n=>l+n/30*(rr-l),yAt=v=>bt-(v-c.min)/(c.max-c.min)*(bt-t),f=n=>c.f(n,phase);cx.font='11px sans-serif';cx.textAlign='right';cx.textBaseline='middle';for(let v=c.min;v<=c.max+c.step*.001;v+=c.step){const y=yAt(v);cx.beginPath();cx.moveTo(l,y);cx.lineTo(rr,y);cx.strokeStyle='rgba(139,148,158,.18)';cx.stroke();cx.fillStyle='#b4bcc6';cx.fillText(`${v.toFixed(c.d)}${c.unit==='%'?'%':' bp'}`,l-9,y);}[2,5,10,15,20,30].forEach(n=>{const x=xAt(n);cx.beginPath();cx.moveTo(x,t);cx.lineTo(x,bt);cx.strokeStyle='rgba(139,148,158,.1)';cx.stroke();cx.fillStyle='#b4bcc6';cx.textAlign='center';cx.textBaseline='top';cx.fillText(`${n}Y`,x,bt+10);});cx.beginPath();for(let i=0;i<=240;i++){const n=30*i/240;if(i===0)cx.moveTo(xAt(n),yAt(f(n)));else cx.lineTo(xAt(n),yAt(f(n)));}cx.strokeStyle=c.color;cx.lineWidth=4;cx.shadowColor=c.color;cx.shadowBlur=10;cx.stroke();cx.shadowBlur=0;const m=phase/(2*Math.PI)*30;cx.beginPath();cx.arc(xAt(m),yAt(f(m)),6,0,2*Math.PI);cx.fillStyle='#fff';cx.fill();cx.lineWidth=2;cx.strokeStyle=c.color;cx.stroke();c.res.forEach((base,i)=>{const residual=base+(c.unit==='%'?.055:7)*Math.sin(phase+i*.9),x=xAt(tenors[i]),fy=yAt(f(tenors[i])),py=yAt(f(tenors[i])+residual),color=residual>0?'#3fb950':'#f85149';cx.beginPath();cx.moveTo(x,fy);cx.lineTo(x,py);cx.strokeStyle=color;cx.lineWidth=2;cx.stroke();cx.beginPath();cx.arc(x,py,5,0,2*Math.PI);cx.fillStyle=color;cx.fill();});chart.setAttribute('aria-label',`Animated illustrative ${c.label} curve. Synthetic data, not market quotes.`);}requestAnimationFrame(drawChart);}
     requestAnimationFrame(drawChart);
 
-    // Bouncing-ball exponential-growth model. Start paused only when the device requests reduced motion.
-    const growthCanvas=document.getElementById('growth-canvas'),gctx=growthCanvas.getContext('2d');
-    const countLabel=document.getElementById('ball-count'),doublingLabel=document.getElementById('doubling-count'),growthStatus=document.getElementById('growth-status'),growthToggle=document.getElementById('growth-toggle'),resetButton=document.getElementById('growth-reset');
-    const ballColors=['#58a6ff','#d2a8ff','#3fb950','#f0883e','#79c0ff','#ff7b72'];
-    const startCount=6,maxCount=96,doubleEvery=2200,simulationLimit=24000;
-    let balls=[],doublings=0,simTime=0,lastSimFrame=null,lastDouble=0,canvasWidth=0,canvasHeight=0;
-    let ballsPaused=reduceMotion.matches;
-    function newBall(x,y,color){const r=6+Math.random()*1.5,rect=growthCanvas.getBoundingClientRect(),angle=Math.random()*Math.PI*2,speed=125+Math.random()*95;return{x:x??r+Math.random()*Math.max(1,rect.width-2*r),y:y??r+Math.random()*Math.max(1,rect.height-2*r),vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,r,color:color||ballColors[Math.floor(Math.random()*ballColors.length)]};}
-    function resetSimulation(){balls=Array.from({length:startCount},()=>newBall());doublings=0;simTime=0;lastDouble=0;lastSimFrame=null;}
-    function updateGrowthControl(){growthToggle.textContent=ballsPaused?'Play balls':'Pause balls';growthStatus.textContent=ballsPaused?'Simulation paused':'Simulation running';}
-    resetSimulation();updateGrowthControl();
-    resetButton.addEventListener('click',resetSimulation);
-    growthToggle.addEventListener('click',()=>{ballsPaused=!ballsPaused;lastSimFrame=null;updateGrowthControl();});
-    function drawGrowth(now){if(lastSimFrame===null)lastSimFrame=now;const dt=Math.min((now-lastSimFrame)/1000,.04);lastSimFrame=now;const rect=growthCanvas.getBoundingClientRect(),w=rect.width,h=rect.height,dpr=devicePixelRatio||1;if(w>0&&h>0){if(w!==canvasWidth||h!==canvasHeight){growthCanvas.width=Math.round(w*dpr);growthCanvas.height=Math.round(h*dpr);canvasWidth=w;canvasHeight=h;}gctx.setTransform(dpr,0,0,dpr,0,0);gctx.clearRect(0,0,w,h);
-      if(!ballsPaused){simTime+=dt*1000;for(const b of balls){b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.x-b.r<0){b.x=b.r;b.vx=Math.abs(b.vx);}else if(b.x+b.r>w){b.x=w-b.r;b.vx=-Math.abs(b.vx);}if(b.y-b.r<0){b.y=b.r;b.vy=Math.abs(b.vy);}else if(b.y+b.r>h){b.y=h-b.r;b.vy=-Math.abs(b.vy);}}
-        const removed=new Set();for(let i=0;i<balls.length;i++){if(removed.has(i))continue;for(let j=i+1;j<balls.length;j++){if(removed.has(j))continue;const a=balls[i],b=balls[j],dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy),minDist=a.r+b.r;if(dist>0&&dist<minDist){const nx=dx/dist,ny=dy/dist,relative=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;if(relative>0){a.vx-=relative*nx;a.vy-=relative*ny;b.vx+=relative*nx;b.vy+=relative*ny;}const overlap=(minDist-dist)/2;a.x-=nx*overlap;a.y-=ny*overlap;b.x+=nx*overlap;b.y+=ny*overlap;if(Math.random()<.045){removed.add(i);removed.add(j);}break;}}}if(removed.size)balls=balls.filter((_,i)=>!removed.has(i));
-        if(simTime-lastDouble>=doubleEvery){lastDouble+=doubleEvery;if(balls.length*2>maxCount){resetSimulation();}else{const originals=balls.slice();for(const b of originals){const angle=Math.random()*Math.PI*2,offset=14;balls.push(newBall(Math.max(8,Math.min(w-8,b.x+Math.cos(angle)*offset)),Math.max(8,Math.min(h-8,b.y+Math.sin(angle)*offset)),b.color));}doublings++;}}
-        if(simTime>=simulationLimit)resetSimulation();}
-      // Draw a motion trail so displacement is easy to notice.
-      gctx.strokeStyle='rgba(139,148,158,.07)';gctx.lineWidth=1;for(let y=h-24;y>0;y-=32){gctx.beginPath();gctx.moveTo(0,y);gctx.lineTo(w,y);gctx.stroke();}
-      for(const b of balls){gctx.beginPath();gctx.arc(b.x,b.y,b.r,0,2*Math.PI);gctx.fillStyle=b.color;gctx.shadowColor=b.color;gctx.shadowBlur=12;gctx.fill();gctx.shadowBlur=0;gctx.beginPath();gctx.arc(b.x-b.r*.3,b.y-b.r*.3,Math.max(1,b.r*.22),0,2*Math.PI);gctx.fillStyle='rgba(255,255,255,.7)';gctx.fill();}}
-      countLabel.textContent=String(balls.length);doublingLabel.textContent=String(doublings);requestAnimationFrame(drawGrowth);}
-    requestAnimationFrame(drawGrowth);
+    // Schematic Earth-Moon mission loop: Moon orbits Earth; spacecraft transfers, is captured, and returns.
+    const spaceCanvas=document.getElementById('space-canvas'), sx=spaceCanvas.getContext('2d');
+    const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let spaceStart=null, spaceW=0, spaceH=0;
+    function roundedLabel(text,x,y,color){sx.font='11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif';sx.textAlign='center';sx.textBaseline='middle';sx.fillStyle=color;sx.fillText(text,x,y);}
+    function drawEarth(x,y,r){const g=sx.createRadialGradient(x-r*.35,y-r*.4,r*.08,x,y,r);g.addColorStop(0,'#72c9ff');g.addColorStop(.58,'#2478c8');g.addColorStop(1,'#102d5c');sx.beginPath();sx.arc(x,y,r,0,Math.PI*2);sx.fillStyle=g;sx.fill();sx.save();sx.beginPath();sx.arc(x,y,r,0,Math.PI*2);sx.clip();sx.fillStyle='rgba(91,190,126,.72)';sx.beginPath();sx.ellipse(x-r*.22,y-r*.18,r*.34,r*.17,-.55,0,Math.PI*2);sx.ellipse(x+r*.36,y+r*.25,r*.22,r*.12,.3,0,Math.PI*2);sx.fill();sx.restore();sx.strokeStyle='rgba(125,211,252,.45)';sx.lineWidth=1;sx.beginPath();sx.arc(x,y,r+2,0,Math.PI*2);sx.stroke();}
+    function drawMoon(x,y,r){const g=sx.createRadialGradient(x-r*.35,y-r*.4,r*.05,x,y,r);g.addColorStop(0,'#e7edf5');g.addColorStop(.72,'#aab5c4');g.addColorStop(1,'#677383');sx.beginPath();sx.arc(x,y,r,0,Math.PI*2);sx.fillStyle=g;sx.fill();[[ -.3,-.2,.18],[.28,-.38,.11],[.32,.23,.16],[-.18,.4,.1]].forEach(([dx,dy,k])=>{sx.beginPath();sx.arc(x+dx*r*1.5,y+dy*r*1.5,r*k,0,Math.PI*2);sx.fillStyle='rgba(70,80,95,.24)';sx.fill();});}
+    function drawRocket(x,y,angle){sx.save();sx.translate(x,y);sx.rotate(angle);sx.shadowColor='#ffd166';sx.shadowBlur=12;sx.fillStyle='#f0f3f6';sx.beginPath();sx.moveTo(12,0);sx.quadraticCurveTo(3,-7,-7,-5);sx.lineTo(-8,5);sx.quadraticCurveTo(3,7,12,0);sx.fill();sx.shadowBlur=0;sx.fillStyle='#58a6ff';sx.beginPath();sx.moveTo(-3,-4);sx.lineTo(-9,-10);sx.lineTo(-8,-3);sx.closePath();sx.fill();sx.beginPath();sx.moveTo(-3,4);sx.lineTo(-9,10);sx.lineTo(-8,3);sx.closePath();sx.fill();sx.fillStyle='#f0883e';sx.beginPath();sx.moveTo(-8,-2);sx.lineTo(-15,0);sx.lineTo(-8,2);sx.fill();sx.fillStyle='#58a6ff';sx.beginPath();sx.arc(3,0,1.6,0,Math.PI*2);sx.fill();sx.restore();}
+    function drawSpace(now){if(spaceStart===null)spaceStart=now;const rect=spaceCanvas.getBoundingClientRect(),w=rect.width,h=rect.height,d=devicePixelRatio||1;if(w>0&&h>0){if(w!==spaceW||h!==spaceH){spaceCanvas.width=Math.round(w*d);spaceCanvas.height=Math.round(h*d);spaceW=w;spaceH=h;}sx.setTransform(d,0,0,d,0,0);sx.clearRect(0,0,w,h);const earth={x:w*.23,y:h*.56,r:Math.min(31,h*.105)},orbit={rx:w*.29,ry:h*.38},moonR=Math.min(15,h*.052);const elapsed=reducedMotion?0:(now-spaceStart)/1000,moonAngle=-Math.PI*.35+elapsed*.19;const moon={x:earth.x+orbit.rx*Math.cos(moonAngle),y:earth.y+orbit.ry*Math.sin(moonAngle)};
+        // Moon's elliptical orbit around Earth.
+        sx.beginPath();sx.ellipse(earth.x,earth.y,orbit.rx,orbit.ry,0,0,Math.PI*2);sx.setLineDash([5,6]);sx.strokeStyle='rgba(88,166,255,.43)';sx.lineWidth=1.2;sx.stroke();sx.setLineDash([]);
+        // Small Earth parking orbit.
+        sx.beginPath();sx.ellipse(earth.x,earth.y,earth.r*1.65,earth.r*1.25,-.2,0,Math.PI*2);sx.setLineDash([2,4]);sx.strokeStyle='rgba(125,211,252,.35)';sx.stroke();sx.setLineDash([]);
+        drawEarth(earth.x,earth.y,earth.r);drawMoon(moon.x,moon.y,moonR);
+        roundedLabel('EARTH',earth.x,earth.y+earth.r+17,'#9ccfff');roundedLabel('MOON',moon.x,moon.y+moonR+15,'#c7d0dc');
+        // Star specks are static relative to the viewport.
+        for(let i=0;i<34;i++){const px=(i*97%997)/997*w,py=(i*53%193)/193*h;sx.fillStyle=`rgba(210,225,245,${.16+(i%4)*.08})`;sx.fillRect(px,py,1.2,1.2);}
+        // Spacecraft flight cycle: Earth orbit, outbound transfer, lunar capture orbit, and return transfer.
+        const cycle=24,phase=(elapsed%cycle)/cycle;let shipX,shipY,dx,dy;
+        const startA=-Math.PI*.75,endA=moonAngle+Math.PI;
+        const earthStart={x:earth.x+earth.r*1.55*Math.cos(startA),y:earth.y+earth.r*1.1*Math.sin(startA)};
+        const moonArrive={x:moon.x+moonR*1.8*Math.cos(endA),y:moon.y+moonR*1.8*Math.sin(endA)};
+        const earthReturn={x:earth.x+earth.r*1.55*Math.cos(startA),y:earth.y+earth.r*1.1*Math.sin(startA)};
+        const mix=(a,b,t)=>a+(b-a)*t;
+        if(phase<.12){const q=phase/.12,a=startA+q*Math.PI*1.55;shipX=earth.x+earth.r*1.55*Math.cos(a);shipY=earth.y+earth.r*1.1*Math.sin(a);dx=-Math.sin(a);dy=Math.cos(a);}
+        else if(phase<.43){const q=(phase-.12)/.31;const control={x:mix(earth.x,moon.x,.5),y:Math.min(earth.y,moon.y)-h*.34};shipX=(1-q)*(1-q)*earthStart.x+2*(1-q)*q*control.x+q*q*moonArrive.x;shipY=(1-q)*(1-q)*earthStart.y+2*(1-q)*q*control.y+q*q*moonArrive.y;dx=2*(1-q)*(control.x-earthStart.x)+2*q*(moonArrive.x-control.x);dy=2*(1-q)*(control.y-earthStart.y)+2*q*(moonArrive.y-control.y);}
+        else if(phase<.57){const q=(phase-.43)/.14,a=endA+q*Math.PI*2;shipX=moon.x+moonR*1.8*Math.cos(a);shipY=moon.y+moonR*1.8*Math.sin(a);dx=-Math.sin(a);dy=Math.cos(a);}
+        else {const q=(phase-.57)/.43;const moonDepart={x:moon.x+moonR*1.8*Math.cos(endA),y:moon.y+moonR*1.8*Math.sin(endA)};const control={x:mix(moon.x,earth.x,.5),y:Math.max(earth.y,moon.y)+h*.34};shipX=(1-q)*(1-q)*moonDepart.x+2*(1-q)*q*control.x+q*q*earthReturn.x;shipY=(1-q)*(1-q)*moonDepart.y+2*(1-q)*q*control.y+q*q*earthReturn.y;dx=2*(1-q)*(control.x-moonDepart.x)+2*q*(earthReturn.x-control.x);dy=2*(1-q)*(control.y-moonDepart.y)+2*q*(earthReturn.y-control.y);}
+        // Draw subtle transfer arcs, using moving endpoints for a clear mission sequence.
+        sx.beginPath();sx.moveTo(earthStart.x,earthStart.y);sx.quadraticCurveTo((earth.x+moon.x)/2,Math.min(earth.y,moon.y)-h*.34,moonArrive.x,moonArrive.y);sx.setLineDash([4,5]);sx.strokeStyle='rgba(255,209,102,.28)';sx.stroke();sx.beginPath();sx.moveTo(moon.x+moonR*1.8*Math.cos(endA),moon.y+moonR*1.8*Math.sin(endA));sx.quadraticCurveTo((earth.x+moon.x)/2,Math.max(earth.y,moon.y)+h*.34,earthReturn.x,earthReturn.y);sx.stroke();sx.setLineDash([]);
+        drawRocket(shipX,shipY,Math.atan2(dy,dx));
+        roundedLabel('EARTH ORBIT',earth.x,Math.max(18,earth.y-earth.r*1.8),'#8fb9d8');
+        if(!reducedMotion)requestAnimationFrame(drawSpace);
+      }}
+    requestAnimationFrame(drawSpace);
   </script>
 </body>
 </html>
